@@ -1,23 +1,26 @@
+import Foundation
 import ExpoModulesCore
 
 public class BlobModule: Module {
-  public func definition() -> ModuleDefinition {
-    Name("BlobModule")
+    public func definition() -> ModuleDefinition {
+        Name("BlobModule")
 
-    Constants([
-      "PI": Double.pi
-    ])
-
-    Events("onChange")
-
-    Function("hello") {
-      return "Hello world! 👋"
+        Class(Blob.self) {
+            Constructor { file in
+                return Blob(blobParts: file.blobParts, options: file.options)
+            }
+            
+            Property("size") { file in
+                file.size
+            }
+            
+            Property("type") { file in
+                file.type
+            }
+            
+            Function("slice") { (file: Blob, start: Int64?, end: Int64?, contentType: String?) in
+                return file.slice(start: start ?? 0, end: end, contentType: contentType ?? "")
+            }
+        }
     }
-
-    AsyncFunction("setValueAsync") { (value: String) in
-      self.sendEvent("onChange", [
-        "value": value
-      ])
-    }
-  }
 }

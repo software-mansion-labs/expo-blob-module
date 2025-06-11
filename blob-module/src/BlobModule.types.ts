@@ -1,7 +1,11 @@
+import { BlobModule } from "./BlobModule";
+
 export type BlobModuleEvents = {
-	onChange: (params: ChangeEventPayload) => void;
+	slice(props: SlicePayload): Promise<BlobModule>;
 };
 
-export type ChangeEventPayload = {
-	value: string;
+export type SlicePayload = {
+	start: Number;
+	end?: Number;
+	contentType?: String;
 };
