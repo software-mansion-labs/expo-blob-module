@@ -1,11 +1,6 @@
-import { BlobModule } from "./BlobModule";
-
-export type BlobModuleEvents = {
-	slice(props: SlicePayload): Promise<BlobModule>;
-};
-
-export type SlicePayload = {
-	start: Number;
-	end?: Number;
-	contentType?: String;
-};
+export declare class Blob {
+	constructor(blobParts?: BlobPart[], options?: BlobPropertyBag);
+	slice(start?: number, end?: number, contentType?: string): Blob;
+	readonly size: number;
+	readonly type: string;
+}

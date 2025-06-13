@@ -1,10 +1,7 @@
-import { NativeModule, requireNativeModule } from "expo";
+import { requireNativeModule } from "expo";
+// import { Blob } from "./BlobModule.types";
+// declare class BlobModule extends NativeModule {
+// 	Blob: typeof Blob;
+// }
 
-import { BlobModuleEvents } from "./BlobModule.types";
-
-export declare class BlobModule extends NativeModule<BlobModuleEvents> {
-	size: Number;
-	type: String;
-}
-
-export default requireNativeModule<BlobModule>("BlobModule");
+export default requireNativeModule("BlobModule");

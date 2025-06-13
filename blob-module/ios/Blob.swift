@@ -1,12 +1,11 @@
 import Foundation
 import ExpoModulesCore
 
-
 public class Blob: SharedObject {
-    var blobParts: [Data]
+    var blobParts: [String]
     var options: BlobPropertyBag
     
-    init(blobParts: [Data] = [], options: BlobPropertyBag = BlobPropertyBag()) {
+    init(blobParts: [String] = [], options: BlobPropertyBag = BlobPropertyBag()) {
         self.blobParts = blobParts
         self.options = options
     }
@@ -27,12 +26,12 @@ public class Blob: SharedObject {
             return Blob(options: BlobPropertyBag(type: contentType))
         }
 
-        var dataSlice = Data()
-        for part in blobParts[startIdx..<endIdx] {
+        var dataSlice: [String] = []
+        for part in blobParts[startIdx...endIdx] {
             dataSlice.append(part)
         }
 
-        return Blob(blobParts: [dataSlice], options: BlobPropertyBag(type: contentType))
+        return Blob(blobParts: dataSlice, options: BlobPropertyBag(type: contentType))
     }
 }
 

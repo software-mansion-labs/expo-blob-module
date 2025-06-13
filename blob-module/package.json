@@ -28,11 +28,15 @@
   "author": "Artur Gęsiarz <artur.gesiarz@swmansion.com> (https://github.com/arturgesiarz)",
   "license": "MIT",
   "homepage": "https://github.com/software-mansion-labs/expo-blob-module#readme",
-  "dependencies": {},
+  "dependencies": {
+    "@types/jest": "^29.5.14",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.3.4"
+  },
   "devDependencies": {
     "@types/react": "~19.0.0",
-    "expo-module-scripts": "^4.1.6",
     "expo": "~53.0.0",
+    "expo-module-scripts": "^4.1.6",
     "react-native": "0.79.1"
   },
   "peerDependencies": {
