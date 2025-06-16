@@ -4,23 +4,15 @@ import BlobModule from "../src/BlobModule";
 
 export default function App() {
 	const handleButtonPress = () => {
-		// TODO:
-		// 1. Dopisac typy do BlobModule
-		// 2. Opisac problem uzywania Class() i konsturktura wewnatrz niego
-		// w natywnej implementacji + napisac, ze uzywanie tego i testowanie pochlanelo mi bardzo duzo czasu
-		// 3. Sprobowac zmienic, typ na Data, eweneltuanie poszuakc innego dostepengo
-		// 4. Objerzec filmik jak sie robi natywne moduly w Expo
-		// TODO FUTURE:
-		// 1. Zrobic implementacje slice, bardziej optymalna
-		const blob = BlobModule.createBlob(["aaa", "bbbb", "ccccc"]);
-		console.log("blob_constructor", blob);
+		const blob = new BlobModule.Blob(["aaa", "bbbb", "ccccc"], {
+			type: "data from table",
+			endings: "native",
+		});
+		console.log("blob_constructor:", blob);
 
-		console.log("blobSize:", BlobModule.getBlobSize(blob));
-		console.log("blobType:", BlobModule.getBlobType(blob));
-		console.log(
-			"slice:",
-			BlobModule.getBlobSize(BlobModule.sliceBlob(blob, 0, 1))
-		);
+		console.log("slice_size:", blob.sliceBlob(1, 2).size);
+
+		console.log("slice_type:", blob.sliceBlob(1, 2, "sliced data").type);
 	};
 
 	return (

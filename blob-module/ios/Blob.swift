@@ -5,7 +5,7 @@ public class Blob: SharedObject {
     var blobParts: [String]
     var options: BlobPropertyBag
     
-    init(blobParts: [String] = [], options: BlobPropertyBag = BlobPropertyBag()) {
+    init(blobParts: [String] = [], options: BlobPropertyBag) {
         self.blobParts = blobParts
         self.options = options
     }
@@ -21,9 +21,10 @@ public class Blob: SharedObject {
     func slice(start: Int64 = 0, end: Int64? = nil, contentType: String = "") -> Blob {
         let startIdx = Int(max(start, 0))
         let endIdx = min(end.map { Int($0) } ?? blobParts.count, blobParts.count)
+        let options = BlobPropertyBag(type: contentType != "" ? contentType : self.options.type, endings: self.options.endings)
 
         if startIdx > endIdx {
-            return Blob(options: BlobPropertyBag(type: contentType))
+            return self
         }
 
         var dataSlice: [String] = []
@@ -31,7 +32,7 @@ public class Blob: SharedObject {
             dataSlice.append(part)
         }
 
-        return Blob(blobParts: dataSlice, options: BlobPropertyBag(type: contentType))
+        return Blob(blobParts: dataSlice, options: options)
     }
 }
 
