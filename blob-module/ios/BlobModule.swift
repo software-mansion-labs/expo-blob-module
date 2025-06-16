@@ -6,8 +6,8 @@ public class BlobModule: Module {
         Name("BlobModule")
         
         Class(Blob.self) {
-            Constructor { (blobParts: [String], options: BlobOptions) in
-                Blob(blobParts: blobParts, options: options)
+            Constructor { (blobParts: [String]?, options: BlobOptions?) in
+                Blob(blobParts: blobParts ?? [], options: options ?? BlobOptions())
             }
             
             Property("size") { (blob: Blob) in

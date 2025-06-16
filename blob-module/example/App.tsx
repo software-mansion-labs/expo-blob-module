@@ -1,37 +1,78 @@
-import { Button, SafeAreaView, ScrollView, Text } from "react-native";
-import { NativeModules } from "react-native";
+import {
+	Button,
+	SafeAreaView,
+	ScrollView,
+	Text,
+	View,
+	StyleSheet,
+} from "react-native";
 import BlobModule from "../src/BlobModule";
+import { Blob } from "blob-module/BlobModule.types";
+import { useState } from "react";
 
 export default function App() {
-	const handleButtonPress = () => {
+	const handleCreateBlob = () => {
 		const blob = new BlobModule.Blob(["aaa", "bbbb", "ccccc"], {
-			type: "data from table",
+			type: "test/plain",
 			endings: "native",
 		});
-		console.log("blob_constructor:", blob);
+		return blob;
+	};
 
-		console.log("slice_size:", blob.slice(2, 2).size);
-
-		console.log("slice_type:", blob.slice(1, 2, "sliced data").type);
+	const handleSliceBlob = () => {
+		const blob = new BlobModule.Blob(["aaa", "bbbb", "ccccc"]);
+		const slicedBlob = blob.slice(1, 2, "text/plain;charset=utf-8");
+		return slicedBlob;
 	};
 
 	return (
 		<SafeAreaView style={styles.container}>
 			<ScrollView style={styles.container}>
 				<Text style={styles.header}>Blob API</Text>
-				<Button onPress={handleButtonPress} title={"SliceTest"}></Button>
+				<TestContainer onPress={handleCreateBlob} title={"Create Blob Test"} />
+				<TestContainer onPress={handleSliceBlob} title={"Slice Blob Test"} />
 			</ScrollView>
 		</SafeAreaView>
 	);
 }
 
-const styles = {
+function TestContainer({
+	onPress,
+	title,
+}: {
+	onPress: () => Blob;
+	title: string;
+}) {
+	const [blob, setBlob] = useState<Blob>();
+
+	return (
+		<View style={styles.test}>
+			<Button
+				onPress={() => {
+					const blob = onPress();
+					setBlob(blob);
+				}}
+				title={title}
+			></Button>
+			<Text>Size: {blob?.size}</Text>
+			<Text>Type: {blob?.type}</Text>
+		</View>
+	);
+}
+
+const styles = StyleSheet.create({
 	header: {
 		fontSize: 30,
 		margin: 20,
+	},
+	test: {
+		flex: 1,
+		justifyContent: "center",
+		alignItems: "center",
+		padding: 10,
 	},
 	container: {
 		flex: 1,
 		backgroundColor: "#eee",
 	},
-};
+});

@@ -46,5 +46,4 @@ struct BlobOptions: Record {
     var type: String = ""
     @Field
     var endings: EndingType = .transparent
-
 }
