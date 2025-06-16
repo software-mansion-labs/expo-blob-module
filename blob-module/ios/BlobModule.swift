@@ -18,8 +18,8 @@ public class BlobModule: Module {
                 blob.type
             }
             
-            Function("slice") { (blob: Blob, start: Int64?, end: Int64?, contentType: String?) in
-                blob.slice(start: start ?? 0, end: end, contentType: contentType ?? "")
+            Function("slice") { (blob: Blob, start: Int?, end: Int?, contentType: String?) in
+                blob.slice(start: start ?? 0, end: end ?? blob.blobParts.count, contentType: contentType ?? "")
             }
             
         }

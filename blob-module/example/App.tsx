@@ -20,8 +20,11 @@ export default function App() {
 	};
 
 	const handleSliceBlob = () => {
-		const blob = new BlobModule.Blob(["aaa", "bbbb", "ccccc"]);
-		const slicedBlob = blob.slice(1, 2, "text/plain;charset=utf-8");
+		const blob = new BlobModule.Blob(["aaa", "bbbb", "ccccc", "dddddddddd"], {
+			type: "test/plain",
+			endings: "native",
+		});
+		const slicedBlob = blob.slice(0, -1);
 		return slicedBlob;
 	};
 
