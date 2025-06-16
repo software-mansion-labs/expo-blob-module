@@ -6,12 +6,8 @@ public class BlobModule: Module {
         Name("BlobModule")
         
         Class(Blob.self) {
-            Constructor { (blobParts: [String], options: [String: String]?) in
-                let type = options?["type"] ?? ""
-                let endings = EndingType(rawValue: options?["endings"] ?? "") ?? .transparent
-                let propetryBag = BlobPropertyBag(type: type, endings: endings)
-                
-                return Blob(blobParts: blobParts, options: propetryBag)
+            Constructor { (blobParts: [String], options: BlobOptions) in
+                Blob(blobParts: blobParts, options: options)
             }
             
             Property("size") { (blob: Blob) in
@@ -22,11 +18,10 @@ public class BlobModule: Module {
                 blob.type
             }
             
-            Function("sliceBlob") { (blob: Blob, start: Int64?, end: Int64?, contentType: String?) in
+            Function("slice") { (blob: Blob, start: Int64?, end: Int64?, contentType: String?) in
                 blob.slice(start: start ?? 0, end: end, contentType: contentType ?? "")
             }
             
         }
-        
     }
 }

@@ -10,9 +10,9 @@ export default function App() {
 		});
 		console.log("blob_constructor:", blob);
 
-		console.log("slice_size:", blob.sliceBlob(1, 2).size);
+		console.log("slice_size:", blob.slice(2, 2).size);
 
-		console.log("slice_type:", blob.sliceBlob(1, 2, "sliced data").type);
+		console.log("slice_type:", blob.slice(1, 2, "sliced data").type);
 	};
 
 	return (

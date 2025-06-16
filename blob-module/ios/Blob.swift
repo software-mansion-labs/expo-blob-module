@@ -3,9 +3,9 @@ import ExpoModulesCore
 
 public class Blob: SharedObject {
     var blobParts: [String]
-    var options: BlobPropertyBag
+    var options: BlobOptions
     
-    init(blobParts: [String] = [], options: BlobPropertyBag) {
+    init(blobParts: [String] = [], options: BlobOptions) {
         self.blobParts = blobParts
         self.options = options
     }
@@ -21,7 +21,7 @@ public class Blob: SharedObject {
     func slice(start: Int64 = 0, end: Int64? = nil, contentType: String = "") -> Blob {
         let startIdx = Int(max(start, 0))
         let endIdx = min(end.map { Int($0) } ?? blobParts.count, blobParts.count)
-        let options = BlobPropertyBag(type: contentType != "" ? contentType : self.options.type, endings: self.options.endings)
+        let options = BlobOptions(type: contentType != "" ? contentType : self.options.type, endings: self.options.endings)
 
         if startIdx > endIdx {
             return self
@@ -36,12 +36,15 @@ public class Blob: SharedObject {
     }
 }
 
-public enum EndingType: String {
+enum EndingType: String, Enumerable {
     case transparent = "transparent"
     case native = "native"
 }
 
-public struct BlobPropertyBag {
+struct BlobOptions: Record {
+    @Field
     var type: String = ""
+    @Field
     var endings: EndingType = .transparent
+
 }
