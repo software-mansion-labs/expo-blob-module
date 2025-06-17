@@ -1,19 +1,6 @@
-import type { StyleProp, ViewStyle } from 'react-native';
-
-export type OnLoadEventPayload = {
-  url: string;
-};
-
-export type BlobModuleEvents = {
-  onChange: (params: ChangeEventPayload) => void;
-};
-
-export type ChangeEventPayload = {
-  value: string;
-};
-
-export type BlobModuleViewProps = {
-  url: string;
-  onLoad: (event: { nativeEvent: OnLoadEventPayload }) => void;
-  style?: StyleProp<ViewStyle>;
-};
+export declare class Blob {
+	constructor(blobParts?: BlobPart[], options?: BlobPropertyBag);
+	slice(start?: number, end?: number, contentType?: string): Blob;
+	readonly size: number;
+	readonly type: string;
+}

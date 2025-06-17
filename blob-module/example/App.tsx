@@ -1,73 +1,81 @@
-import { useEvent } from 'expo';
-import BlobModule, { BlobModuleView } from 'blob-module';
-import { Button, SafeAreaView, ScrollView, Text, View } from 'react-native';
+import {
+	Button,
+	SafeAreaView,
+	ScrollView,
+	Text,
+	View,
+	StyleSheet,
+} from "react-native";
+import BlobModule from "../src/BlobModule";
+import { Blob } from "blob-module/BlobModule.types";
+import { useState } from "react";
 
 export default function App() {
-  const onChangePayload = useEvent(BlobModule, 'onChange');
+	const handleCreateBlob = () => {
+		const blob = new BlobModule.Blob(["aaa", "bbbb", "ccccc"], {
+			type: "test/plain",
+			endings: "native",
+		});
+		return blob;
+	};
 
-  return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.container}>
-        <Text style={styles.header}>Module API Example</Text>
-        <Group name="Constants">
-          <Text>{BlobModule.PI}</Text>
-        </Group>
-        <Group name="Functions">
-          <Text>{BlobModule.hello()}</Text>
-        </Group>
-        <Group name="Async functions">
-          <Button
-            title="Set value"
-            onPress={async () => {
-              await BlobModule.setValueAsync('Hello from JS!');
-            }}
-          />
-        </Group>
-        <Group name="Events">
-          <Text>{onChangePayload?.value}</Text>
-        </Group>
-        <Group name="Views">
-          <BlobModuleView
-            url="https://www.example.com"
-            onLoad={({ nativeEvent: { url } }) => console.log(`Loaded: ${url}`)}
-            style={styles.view}
-          />
-        </Group>
-      </ScrollView>
-    </SafeAreaView>
-  );
+	const handleSliceBlob = () => {
+		const blob = new BlobModule.Blob(["aaa", "bbbb", "ccccc", "dddddddddd"], {
+			type: "test/plain",
+			endings: "native",
+		});
+		const slicedBlob = blob.slice(0, -2);
+		return slicedBlob;
+	};
+
+	return (
+		<SafeAreaView style={styles.container}>
+			<ScrollView style={styles.container}>
+				<Text style={styles.header}>Blob API</Text>
+				<TestContainer onPress={handleCreateBlob} title={"Create Blob Test"} />
+				<TestContainer onPress={handleSliceBlob} title={"Slice Blob Test"} />
+			</ScrollView>
+		</SafeAreaView>
+	);
 }
 
-function Group(props: { name: string; children: React.ReactNode }) {
-  return (
-    <View style={styles.group}>
-      <Text style={styles.groupHeader}>{props.name}</Text>
-      {props.children}
-    </View>
-  );
+function TestContainer({
+	onPress,
+	title,
+}: {
+	onPress: () => Blob;
+	title: string;
+}) {
+	const [blob, setBlob] = useState<Blob>();
+
+	return (
+		<View style={styles.test}>
+			<Button
+				onPress={() => {
+					const blob = onPress();
+					setBlob(blob);
+				}}
+				title={title}
+			/>
+			<Text>Size: {blob?.size}</Text>
+			<Text>Type: {blob?.type}</Text>
+		</View>
+	);
 }
 
-const styles = {
-  header: {
-    fontSize: 30,
-    margin: 20,
-  },
-  groupHeader: {
-    fontSize: 20,
-    marginBottom: 20,
-  },
-  group: {
-    margin: 20,
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    padding: 20,
-  },
-  container: {
-    flex: 1,
-    backgroundColor: '#eee',
-  },
-  view: {
-    flex: 1,
-    height: 200,
-  },
-};
+const styles = StyleSheet.create({
+	header: {
+		fontSize: 30,
+		margin: 20,
+	},
+	test: {
+		flex: 1,
+		justifyContent: "center",
+		alignItems: "center",
+		padding: 10,
+	},
+	container: {
+		flex: 1,
+		backgroundColor: "#eee",
+	},
+});
