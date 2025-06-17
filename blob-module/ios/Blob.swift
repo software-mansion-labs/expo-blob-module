@@ -10,8 +10,8 @@ public class Blob: SharedObject {
         self.options = options
     }
 
-    var size: UInt64 {
-        return blobParts.reduce(0) { $0 + UInt64($1.count) }
+    var size: Int {
+        return blobParts.reduce(0) { $0 + $1.count }
     }
 
     var type: String {
@@ -19,22 +19,36 @@ public class Blob: SharedObject {
     }
 
     func slice(start: Int = 0, end: Int? = nil, contentType: String = "") -> Blob {
-        let numElements = blobParts.count
-        let startIdx = Int(max(start, 0))
-        var endIdx = min(end.map { Int($0) } ?? numElements - 1, numElements - 1)
+        let startIdx = max(start, 0)
+        var endIdx = min(end ?? self.size - 1, self.size - 1)
         let options = BlobOptions(type: contentType != "" ? contentType : self.options.type, endings: self.options.endings)
         
         if endIdx < 0 {
-            endIdx = numElements - 1 + endIdx;
+            endIdx = self.size - 1 + endIdx;
         }
 
-        if startIdx > endIdx || start == 0 && end == numElements - 1 {
+        if startIdx > endIdx || start == 0 && end == self.size - 1 {
             return self
         }
         
         var dataSlice: [String] = []
-        for part in blobParts[startIdx...endIdx] {
-            dataSlice.append(part)
+        var charsLeft = endIdx - startIdx + 1
+        for part in blobParts {
+            if part.count <= charsLeft {
+                charsLeft -= part.count
+                dataSlice.append(part)
+            } else if charsLeft > 0 {
+                var partToAdd = ""
+                for char in part {
+                    if charsLeft > 0 {
+                        charsLeft -= 1
+                        partToAdd += String(char)
+                    }
+                }
+                dataSlice.append(partToAdd)
+            } else {
+                break
+            }
         }
 
         return Blob(blobParts: dataSlice, options: options)

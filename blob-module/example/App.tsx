@@ -24,7 +24,7 @@ export default function App() {
 			type: "test/plain",
 			endings: "native",
 		});
-		const slicedBlob = blob.slice(0, -1);
+		const slicedBlob = blob.slice(0, -2);
 		return slicedBlob;
 	};
 
@@ -56,7 +56,7 @@ function TestContainer({
 					setBlob(blob);
 				}}
 				title={title}
-			></Button>
+			/>
 			<Text>Size: {blob?.size}</Text>
 			<Text>Type: {blob?.type}</Text>
 		</View>
