@@ -29,8 +29,8 @@ export default function App() {
 	};
 
 	return (
-		<SafeAreaView style={styles.container}>
-			<ScrollView style={styles.container}>
+		<SafeAreaView style={styles.main}>
+			<ScrollView>
 				<Text style={styles.header}>Blob API</Text>
 				<TestContainer onPress={handleCreateBlob} title={"Create Blob Test"} />
 				<TestContainer onPress={handleSliceBlob} title={"Slice Blob Test"} />
@@ -47,9 +47,21 @@ function TestContainer({
 	title: string;
 }) {
 	const [blob, setBlob] = useState<Blob>();
+	const [textOuput, setTextOutput] = useState<String>("-");
+
+	const textTrigger = () => {
+		blob
+			?.text()
+			.then((res) => {
+				setTextOutput(res);
+			})
+			.catch((err) => {
+				console.log("Error during native function text() execution:", err);
+			});
+	};
 
 	return (
-		<View style={styles.test}>
+		<View style={styles.container}>
 			<Button
 				onPress={() => {
 					const blob = onPress();
@@ -59,23 +71,30 @@ function TestContainer({
 			/>
 			<Text>Size: {blob?.size}</Text>
 			<Text>Type: {blob?.type}</Text>
+			<View style={styles.container}>
+				<Button
+					disabled={blob === undefined}
+					title="Text trigger"
+					onPress={textTrigger}
+				></Button>
+				<Text>Text: {textOuput}</Text>
+			</View>
 		</View>
 	);
 }
 
 const styles = StyleSheet.create({
-	header: {
-		fontSize: 30,
-		margin: 20,
-	},
-	test: {
+	main: {
 		flex: 1,
-		justifyContent: "center",
-		alignItems: "center",
-		padding: 10,
+		backgroundColor: "#eee",
 	},
 	container: {
 		flex: 1,
-		backgroundColor: "#eee",
+		justifyContent: "center",
+		alignItems: "center",
+	},
+	header: {
+		fontSize: 30,
+		margin: 20,
 	},
 });

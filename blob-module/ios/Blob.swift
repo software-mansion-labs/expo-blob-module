@@ -53,6 +53,36 @@ public class Blob: SharedObject {
 
         return Blob(blobParts: dataSlice, options: options)
     }
+    
+    func getStream() -> BlobStream {
+        let dataParts = blobParts.compactMap { $0.data(using: .utf8) }
+        return BlobStream(data: dataParts)
+    }
+    
+    func text() async throws -> String {
+        do {
+            let stream = getStream()
+            let reader = stream.getReader()
+            var fullData = Data()
+            
+            while true {
+                do {
+                    let data = try await reader.readAll()
+                    fullData.append(data);
+                } catch {
+                    break
+                }
+            }
+            
+             guard let resultString = String(data: fullData, encoding: .utf8) else {
+                 throw NSError(domain: "UTF8DecodingError", code: 2, userInfo: nil)
+             }
+             print(resultString)
+             return resultString
+        } catch let error {
+            throw error
+        }
+    }
 }
 
 enum EndingType: String, Enumerable {
