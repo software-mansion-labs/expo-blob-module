@@ -53,6 +53,7 @@ function TestContainer({
 		blob
 			?.text()
 			.then((res) => {
+				console.log(res);
 				setTextOutput(res);
 			})
 			.catch((err) => {

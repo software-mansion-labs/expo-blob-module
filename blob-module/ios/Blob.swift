@@ -67,8 +67,10 @@ public class Blob: SharedObject {
             
             while true {
                 do {
-                    let data = try await reader.read()
-                    fullData.append(data);
+                    let chunk = try await reader.read()
+                    if let data = chunk.value {
+                        fullData.append(data);
+                    }
                 } catch {
                     break
                 }
