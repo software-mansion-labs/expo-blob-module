@@ -21,7 +21,10 @@ public class BlobModule: Module {
             Function("slice") { (blob: Blob, start: Int?, end: Int?, contentType: String?) in
                 blob.slice(start: start ?? 0, end: end ?? blob.blobParts.count, contentType: contentType ?? "")
             }
-            
+                
+            AsyncFunction("text") { (blob: Blob) async in
+                try? await blob.text()
+            }
         }
     }
 }
