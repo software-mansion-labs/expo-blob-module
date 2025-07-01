@@ -71,6 +71,9 @@ public class Blob: SharedObject {
                     if let data = chunk.value {
                         fullData.append(data);
                     }
+                    if chunk.isDone == true {
+                        break
+                    }
                 } catch {
                     break
                 }
