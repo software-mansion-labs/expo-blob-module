@@ -1,42 +1,35 @@
 
+enum ReadableStreamError: Error {
+    case streamLocked
+}
+
 class ReadableStream {
     var data: [Data]
-    var currentIndex = 0
+    var isLocked = false
     
     init(data: [Data]) {
         self.data = data
     }
     
-    func cancel() {
-        // todo
+    var locked: Bool {
+        return isLocked
     }
     
-    static func from() {
-        // todo
+    func cancel(reason: String?) {
+        self.data = []
+        isLocked = false
     }
     
-    func getReader() -> ReadableStreamDefaultReader {
+    static func from(iterable: [Data]) -> ReadableStream {
+        return ReadableStream(data: iterable)
+    }
+    
+    func getReader() throws -> ReadableStreamDefaultReader {
+        if self.isLocked {
+            throw ReadableStreamError.streamLocked
+        }
+        isLocked = true
         return ReadableStreamDefaultReader(data: data)
-    }
-    
-    func locked() {
-        // todo
-    }
-    
-    func pipeTrough() {
-        // todo
-    }
-    
-    func pipeTo() {
-        // todo
-    }
-    
-    func tee() {
-        // todo
-    }
-    
-    func transferable() {
-        // todo
     }
     
 }
