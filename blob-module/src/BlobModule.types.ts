@@ -5,5 +5,5 @@ export declare class Blob {
 	readonly type: string;
 
 	slice(start?: number, end?: number, contentType?: string): Blob;
-	text(): Promise<string>;
+	text(): string;
 }

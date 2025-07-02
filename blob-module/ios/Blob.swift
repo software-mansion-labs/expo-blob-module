@@ -59,33 +59,8 @@ public class Blob: SharedObject {
         return ReadableStream(data: dataParts)
     }
     
-    func text() async throws -> String {
-        do {
-            let stream = stream()
-            let reader = stream.getReader()
-            var fullData = Data()
-            
-            while true {
-                do {
-                    let chunk = try await reader.read()
-                    if let data = chunk.value {
-                        fullData.append(data);
-                    }
-                    if chunk.isDone == true {
-                        break
-                    }
-                } catch {
-                    break
-                }
-            }
-            
-             guard let resultString = String(data: fullData, encoding: .utf8) else {
-                 throw NSError(domain: "UTF8DecodingError", code: 2, userInfo: nil)
-             }
-             return resultString
-        } catch let error {
-            throw error
-        }
+    func text() -> String {
+        return blobParts.joined(separator: "") 
     }
 }
 

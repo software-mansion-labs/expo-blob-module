@@ -22,8 +22,8 @@ public class BlobModule: Module {
                 blob.slice(start: start ?? 0, end: end ?? blob.blobParts.count, contentType: contentType ?? "")
             }
                 
-            AsyncFunction("text") { (blob: Blob) async in
-                try? await blob.text()
+            Function("text") { (blob: Blob) in
+                blob.text()
             }
         }
     }

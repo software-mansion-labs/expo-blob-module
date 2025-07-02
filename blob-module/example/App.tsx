@@ -50,14 +50,7 @@ function TestContainer({
 	const [textOuput, setTextOutput] = useState<String>("-");
 
 	const textTrigger = () => {
-		blob
-			?.text()
-			.then((res) => {
-				setTextOutput(res);
-			})
-			.catch((err) => {
-				console.log("Error during native function text() execution:", err);
-			});
+		setTextOutput(blob?.text() ?? "-");
 	};
 
 	return (
