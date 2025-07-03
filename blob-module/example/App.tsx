@@ -12,11 +12,22 @@ import { useState } from "react";
 
 export default function App() {
 	const handleCreateBlob = () => {
-		const blob = new BlobModule.Blob(["aaa", "bbbb", "ccccc"], {
+		const blob1 = new BlobModule.Blob(["a", "bbb", "d"], {
 			type: "test/plain",
 			endings: "native",
 		});
-		return blob;
+
+		const blob2 = new BlobModule.Blob(blob1, {
+			type: "test/plain",
+			endings: "native",
+		});
+
+		const blob3 = new BlobModule.Blob(blob2, {
+			type: "test/plain",
+			endings: "native",
+		});
+
+		return blob3;
 	};
 
 	const handleSliceBlob = () => {
@@ -24,7 +35,7 @@ export default function App() {
 			type: "test/plain",
 			endings: "native",
 		});
-		const slicedBlob = blob.slice(0, -2);
+		const slicedBlob = blob.slice(0, 8);
 		return slicedBlob;
 	};
 

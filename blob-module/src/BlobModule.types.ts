@@ -1,5 +1,5 @@
 export declare class Blob {
-	constructor(blobParts?: BlobPart[], options?: BlobPropertyBag);
+	constructor(blobParts?: any, options?: BlobPropertyBag);
 
 	readonly size: number;
 	readonly type: string;
