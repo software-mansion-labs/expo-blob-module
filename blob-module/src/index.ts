@@ -1,1 +1,1 @@
-export * from "./BlobModule";
+export { BlobModule } from "./BlobModule";

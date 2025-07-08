@@ -54,10 +54,6 @@ public class Blob: SharedObject, BlobPart {
         return Blob(blobParts: dataSlice, options: options)
     }
     
-    func stream() {
-        // todo
-    }
-    
     func text() -> String {
         return blobParts.reduce("") { $0 + $1.text() }
     }

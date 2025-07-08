@@ -24,6 +24,14 @@ public class BlobModule: Module {
                 blob.type
             }
             
+            Property("options") { (blob: Blob) in
+                blob.options
+            }
+            
+            Property("blobParts") { (blob: Blob) in
+                blob.blobParts
+            }
+            
             Function("slice") { (blob: Blob, start: Int?, end: Int?, contentType: String?) in
                 blob.slice(start: start ?? 0, end: end ?? blob.blobParts.count, contentType: contentType ?? "")
             }

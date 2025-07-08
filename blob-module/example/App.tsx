@@ -6,83 +6,114 @@ import {
 	View,
 	StyleSheet,
 } from "react-native";
-import BlobModule from "../src/BlobModule";
-import { Blob } from "blob-module/BlobModule.types";
+import { BlobModule as Blob } from "blob-module";
 import { useState } from "react";
 
 export default function App() {
 	const handleCreateBlob = () => {
-		const blob1 = new BlobModule.Blob(["a", "bbb", "d"], {
+		const blob = new Blob(["a", "bbb", "d"], {
 			type: "test/plain",
 			endings: "native",
 		});
 
-		const blob2 = new BlobModule.Blob(blob1, {
-			type: "test/plain",
-			endings: "native",
-		});
-
-		const blob3 = new BlobModule.Blob(blob2, {
-			type: "test/plain",
-			endings: "native",
-		});
-
-		return blob3;
+		return (
+			<View style={styles.container}>
+				<Text>Size: {blob?.size}</Text>
+				<Text>Type: {blob?.type}</Text>
+				<Text>Text: {blob?.text()}</Text>
+			</View>
+		);
 	};
 
 	const handleSliceBlob = () => {
-		const blob = new BlobModule.Blob(["aaa", "bbbb", "ccccc", "dddddddddd"], {
+		const blob = new Blob(["aaa", "bbbb", "ccccc", "dddddddddd"], {
 			type: "test/plain",
 			endings: "native",
 		});
+
 		const slicedBlob = blob.slice(0, 8);
-		return slicedBlob;
+
+		return (
+			<View style={styles.container}>
+				<Text>Size: {blob?.size}</Text>
+				<Text>Type: {blob?.type}</Text>
+				<Text>Text before slice: {blob?.text()}</Text>
+				<Text>Text after slice [0-8]: {slicedBlob?.text()}</Text>
+			</View>
+		);
 	};
+
+	const handleStreamBlob = () => {
+		const blob = new Blob(["aaa", "bbbb", "ccccc", "dddddddddd"], {
+			type: "test/plain",
+			endings: "native",
+		});
+
+		readStream(blob.stream()).then((data: Uint8Array) => {
+			console.log(data);
+		});
+
+		return (
+			<View style={styles.container}>
+				<Text>Size: {blob?.size}</Text>
+				<Text>Type: {blob?.type}</Text>
+				<Text>Text: {blob?.text()}</Text>
+			</View>
+		);
+	};
+
+	async function readStream(
+		stream: ReadableStream<Uint8Array>
+	): Promise<Uint8Array> {
+		const reader = stream.getReader();
+		const chunks: Uint8Array[] = [];
+		while (true) {
+			const { value, done } = await reader.read();
+			if (done) break;
+			chunks.push(value);
+		}
+
+		let totalLength = chunks.reduce((sum, arr) => sum + arr.length, 0);
+		let result = new Uint8Array(totalLength);
+		let offset = 0;
+		for (const chunk of chunks) {
+			result.set(chunk, offset);
+			offset += chunk.length;
+		}
+		return result;
+	}
 
 	return (
 		<SafeAreaView style={styles.main}>
 			<ScrollView>
 				<Text style={styles.header}>Blob API</Text>
-				<TestContainer onPress={handleCreateBlob} title={"Create Blob Test"} />
-				<TestContainer onPress={handleSliceBlob} title={"Slice Blob Test"} />
+				<View>
+					<TestContainer
+						content={handleCreateBlob}
+						title={"Create Blob Test"}
+					/>
+					<TestContainer content={handleSliceBlob} title={"Slice Blob Test"} />
+
+					<TestContainer
+						content={handleStreamBlob}
+						title={"Stream Blob Test"}
+					/>
+				</View>
 			</ScrollView>
 		</SafeAreaView>
 	);
 }
 
-function TestContainer({
-	onPress,
-	title,
-}: {
-	onPress: () => Blob;
-	title: string;
-}) {
-	const [blob, setBlob] = useState<Blob>();
-	const [textOuput, setTextOutput] = useState<String>("-");
-
-	const textTrigger = () => {
-		setTextOutput(blob?.text() ?? "-");
-	};
-
+function TestContainer({ content, title }: { content: any; title: string }) {
+	const [testStarted, setTestStarted] = useState(false);
 	return (
 		<View style={styles.container}>
 			<Button
-				onPress={() => {
-					const blob = onPress();
-					setBlob(blob);
-				}}
+				disabled={testStarted}
+				onPress={() => setTestStarted(true)}
 				title={title}
 			/>
-			<Text>Size: {blob?.size}</Text>
-			<Text>Type: {blob?.type}</Text>
-			<View style={styles.container}>
-				<Button
-					disabled={blob === undefined}
-					title="Text trigger"
-					onPress={textTrigger}
-				></Button>
-				<Text>Text: {textOuput}</Text>
-			</View>
+			{testStarted && content()}
 		</View>
 	);
 }
