@@ -1,17 +1,17 @@
 import Foundation
 import ExpoModulesCore
 
-public class Blob: SharedObject {
-    var blobParts: [String]
+public class Blob: SharedObject, BlobPart {
+    var blobParts: [BlobPart]
     var options: BlobOptions
     
-    init(blobParts: [String] = [], options: BlobOptions) {
-        self.blobParts = blobParts
-        self.options = options
+    init(blobParts: [BlobPart]?, options: BlobOptions?) {
+        self.blobParts = blobParts ?? []
+        self.options = options ?? BlobOptions()
     }
 
     var size: Int {
-        return blobParts.reduce(0) { $0 + $1.count }
+        return blobParts.reduce(0) { $0 + $1.size }
     }
 
     var type: String {
@@ -31,15 +31,15 @@ public class Blob: SharedObject {
             return self
         }
         
-        var dataSlice: [String] = []
+        var dataSlice: [BlobPart] = []
         var charsLeft = endIdx - startIdx + 1
         for part in blobParts {
-            if part.count <= charsLeft {
-                charsLeft -= part.count
+            if part.text().count <= charsLeft {
+                charsLeft -= part.text().count
                 dataSlice.append(part)
             } else if charsLeft > 0 {
                 var partToAdd = ""
-                for char in part {
+                for char in part.text() {
                     if charsLeft > 0 {
                         charsLeft -= 1
                         partToAdd += String(char)
@@ -54,34 +54,8 @@ public class Blob: SharedObject {
         return Blob(blobParts: dataSlice, options: options)
     }
     
-    func getStream() -> BlobStream {
-        let dataParts = blobParts.compactMap { $0.data(using: .utf8) }
-        return BlobStream(data: dataParts)
-    }
-    
-    func text() async throws -> String {
-        do {
-            let stream = getStream()
-            let reader = stream.getReader()
-            var fullData = Data()
-            
-            while true {
-                do {
-                    let data = try await reader.readAll()
-                    fullData.append(data);
-                } catch {
-                    break
-                }
-            }
-            
-             guard let resultString = String(data: fullData, encoding: .utf8) else {
-                 throw NSError(domain: "UTF8DecodingError", code: 2, userInfo: nil)
-             }
-             print(resultString)
-             return resultString
-        } catch let error {
-            throw error
-        }
+    func text() -> String {
+        return blobParts.reduce("") { $0 + $1.text() }
     }
 }
 
@@ -95,4 +69,18 @@ struct BlobOptions: Record {
     var type: String = ""
     @Field
     var endings: EndingType = .transparent
+}
+
+protocol BlobPart {
+    var size: Int { get }
+    func text() -> String
+}
+
+extension String: BlobPart {
+    var size: Int {
+        return self.count
+    }
+    func text() -> String {
+        return self
+    }
 }
