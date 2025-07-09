@@ -5,7 +5,7 @@ export declare class Blob {
 	constructor(blobParts?: any, options?: BlobPropertyBag);
 
 	slice(start?: number, end?: number, contentType?: string): Blob;
-	text(): string;
+	text(): Promise<string>;
 	stream(): ReadableStream;
 }
 
