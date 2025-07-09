@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Text, View, StyleSheet } from "react-native";
-import { BlobModule as Blob } from "blob-module";
+import { ExpoBlob as Blob } from "blob-module";
 
 export function SliceBlobTestComponent() {
 	const [blobText, setBlobText] = useState<string | null>(null);

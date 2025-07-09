@@ -3,7 +3,7 @@ import ExpoModulesCore
 
 public class BlobModule: Module {
     public func definition() -> ModuleDefinition {
-        Name("BlobModule")
+        Name("ExpoBlob")
         
         Class(Blob.self) {
             Constructor { (blobParts: Either<[String], Blob>, options: BlobOptions?) in

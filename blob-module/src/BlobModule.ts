@@ -1,9 +1,9 @@
 import { requireNativeModule } from "expo";
 import { Blob } from "./BlobModule.types";
 
-const NativeBlobModule: any = requireNativeModule("BlobModule");
+const NativeBlobModule: any = requireNativeModule("ExpoBlob");
 
-export class BlobModule extends NativeBlobModule.Blob implements Blob {
+export class ExpoBlob extends NativeBlobModule.Blob implements Blob {
 	constructor(blobParts?: any, options?: BlobPropertyBag) {
 		super(blobParts, options);
 	}
@@ -22,7 +22,7 @@ export class BlobModule extends NativeBlobModule.Blob implements Blob {
 			type: slicedBlob.type,
 			endings: slicedBlob.endings,
 		};
-		return new BlobModule(slicedBlob, options);
+		return new ExpoBlob(slicedBlob, options);
 	}
 
 	async text(): Promise<string> {
