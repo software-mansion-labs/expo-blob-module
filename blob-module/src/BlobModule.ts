@@ -8,14 +8,6 @@ export class ExpoBlob extends NativeBlobModule.Blob implements Blob {
 		super(blobParts, options);
 	}
 
-	get size(): number {
-		return super.size;
-	}
-
-	get type(): string {
-		return super.type;
-	}
-
 	slice(start?: number, end?: number, contentType?: string): Blob {
 		const slicedBlob = super.slice(start, end, contentType);
 		const options: BlobPropertyBag = {
