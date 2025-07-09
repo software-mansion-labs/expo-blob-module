@@ -94,10 +94,10 @@ export default function App() {
 					/>
 					<TestContainer content={handleSliceBlob} title={"Slice Blob Test"} />
 
-					<TestContainer
+					{/* <TestContainer
 						content={handleStreamBlob}
 						title={"Stream Blob Test"}
-					/>
+					/> */}
 				</View>
 			</ScrollView>
 		</SafeAreaView>

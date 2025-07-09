@@ -1,36 +1,30 @@
 import { requireNativeModule } from "expo";
-import { Blob, BlobPart } from "./BlobModule.types";
+import { Blob } from "./BlobModule.types";
 
 const NativeBlobModule: any = requireNativeModule("BlobModule");
 
-export class BlobModule implements Blob {
-	private _blob: Blob;
-	public blobParts: BlobPart[];
-	public options: BlobPropertyBag;
-
-	constructor(blobParts?: BlobPart[], options?: BlobPropertyBag) {
-		this._blob = new NativeBlobModule.Blob(blobParts, options);
-		this.blobParts = blobParts || [];
-		this.options = options || {};
+export class BlobModule extends NativeBlobModule.Blob {
+	constructor(blobParts?: any, options?: BlobPropertyBag) {
+		super(blobParts, options);
 	}
 
 	get size(): number {
-		return this._blob.size;
+		return super.size;
 	}
 
 	get type(): string {
-		return this._blob.type;
+		return super.type;
 	}
 
 	slice(start?: number, end?: number, contentType?: string): Blob {
-		const slicedBlob = this._blob.slice(start, end, contentType);
-		const blobParts = slicedBlob.blobParts || [];
-		const options = slicedBlob.options || {};
-		return new BlobModule(blobParts, options);
+		const slicedBlob = super.slice(start, end, contentType);
+		const type = slicedBlob.type;
+		const endings = slicedBlob.endings;
+		return new BlobModule(slicedBlob, { type, endings });
 	}
 
 	text(): string {
-		return this._blob.text();
+		return super.text();
 	}
 
 	stream(): ReadableStream {

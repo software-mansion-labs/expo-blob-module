@@ -24,12 +24,8 @@ public class BlobModule: Module {
                 blob.type
             }
             
-            Property("options") { (blob: Blob) in
-                blob.options
-            }
-            
-            Property("blobParts") { (blob: Blob) in
-                blob.blobParts
+            Property("endings") { (blob: Blob) in
+                blob.options.endings
             }
             
             Function("slice") { (blob: Blob, start: Int?, end: Int?, contentType: String?) in
