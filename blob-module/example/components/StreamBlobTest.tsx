@@ -6,7 +6,7 @@ export function StreamBlobTestComponent() {
 	const [blobText, setBlobText] = useState<string | null>(null);
 	const [streamedBlobArray, setStreamedBlobArray] = useState<Uint8Array>();
 
-	const blob = new Blob(["aaa", "bbbb", "ccccc", "dddddddddd"], {
+	const blob = new Blob(["aaa", "bbbb"], {
 		type: "test/plain",
 		endings: "native",
 	});
