@@ -4,7 +4,7 @@ import { ExpoBlob as Blob } from "blob-module";
 
 export function CreateBlobTestComponent() {
 	const [blobText, setBlobText] = useState<string | null>(null);
-	const blob = new Blob(["a", "bbb", "d"], {
+	const blob = new Blob(["a", "bbb", "d", ["edf", ["aaaa"]]], {
 		type: "test/plain",
 		endings: "native",
 	});
