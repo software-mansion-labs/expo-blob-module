@@ -4,21 +4,29 @@ import { Blob } from "./BlobModule.types";
 const NativeBlobModule: any = requireNativeModule("ExpoBlob");
 
 export class ExpoBlob extends NativeBlobModule.Blob implements Blob {
-	constructor(blobParts?: any, options?: BlobPropertyBag) {
+	test(): string {
+		return super.test()
+	}
+
+	opt(options : BlobPropertyBag) {
+		return super.opt(options)
+	}
+
+	constructor(blobParts?: (string | Blob)[], options?: BlobPropertyBag) {
 		super(blobParts, options);
 	}
 
-	slice(start?: number, end?: number, contentType?: string): Blob {
-		const slicedBlob = super.slice(start, end, contentType);
-		const options: BlobPropertyBag = {
-			type: slicedBlob.type,
-			endings: slicedBlob.endings,
-		};
-		return new ExpoBlob(slicedBlob, options);
+	me(): Blob {
+		return super.me()
 	}
 
+	slice(start?: number, end?: number, contentType?: string): Blob {
+		return super.slice(start, end, contentType);
+	}
+
+	// @ts-expect-error
 	async text(): Promise<string> {
-		return Promise.resolve(super.text());
+		return (super.text());
 	}
 
 	stream(): ReadableStream {
