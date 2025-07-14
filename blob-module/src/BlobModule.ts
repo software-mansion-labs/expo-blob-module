@@ -1,14 +1,16 @@
 import { requireNativeModule } from "expo";
 import { Blob } from "./BlobModule.types";
 
-const NativeBlobModule: any = requireNativeModule("ExpoBlob");
+export const NativeBlobModule: any = requireNativeModule("ExpoBlob");
 
 function flattenBlobParts(parts: any[]): any[] {
-	const result: any[] = [];
+	const result = [];
 	for (const part of parts) {
 		if (Array.isArray(part)) {
 			result.push(...flattenBlobParts(part));
-		} else {
+		} else if (typeof part === "string") {
+			result.push(part);
+		} else if (part instanceof ExpoBlob) {
 			result.push(part);
 		}
 	}
@@ -17,8 +19,14 @@ function flattenBlobParts(parts: any[]): any[] {
 
 export class ExpoBlob extends NativeBlobModule.Blob implements Blob {
 	constructor(blobParts?: any[], options?: BlobPropertyBag) {
-		const flatParts = blobParts ? flattenBlobParts(blobParts) : [];
-		super(flatParts, options);
+		// const flatParts = blobParts ? flattenBlobParts(blobParts) : [];
+		// console.log("flatParts", flatParts);
+		// if (blobParts && blobParts[0] instanceof ExpoBlob) {
+		// 	super([], options);
+		// } else {
+		// 	super(flatParts, options);
+		// }
+		super(blobParts, options);
 	}
 
 	slice(start?: number, end?: number, contentType?: string): Blob {

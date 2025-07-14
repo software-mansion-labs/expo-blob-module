@@ -6,14 +6,8 @@ public class BlobModule: Module {
         Name("ExpoBlob")
         
         Class(Blob.self) {
-            Constructor { (blobParts: Either<[String], Blob>, options: BlobOptions?) in
-                if let blobPartsList: [String] = blobParts.get() {
-                    return Blob(blobParts: blobPartsList, options: options ?? BlobOptions())
-                }
-                else if let blobPartsSingleBlob: Blob = blobParts.get() {
-                    return Blob(blobParts: [blobPartsSingleBlob], options: options ?? BlobOptions())
-                }
-                return Blob(blobParts: [], options: options ?? BlobOptions())
+            Constructor { (blobParts: [BlobPart]?, options: BlobOptions?) in
+                return Blob(blobParts: blobParts ?? [], options: options ?? BlobOptions())
             }
             
             Property("size") { (blob: Blob) in
@@ -34,6 +28,10 @@ public class BlobModule: Module {
                 
             Function("text") { (blob: Blob) in
                 blob.text()
+            }
+            
+            Function("self") { (blob: Blob) in
+                blob
             }
         }
     }

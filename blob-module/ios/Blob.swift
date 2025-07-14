@@ -1,7 +1,7 @@
 import Foundation
 import ExpoModulesCore
 
-public class Blob: SharedObject, BlobPart {
+public class Blob: SharedObject {
     var blobParts: [BlobPart]
     var options: BlobOptions
     
@@ -11,7 +11,7 @@ public class Blob: SharedObject, BlobPart {
     }
 
     var size: Int {
-        return blobParts.reduce(0) { $0 + $1.size }
+        return blobParts.reduce(0) { $0 + $1.size() }
     }
 
     var type: String {
@@ -45,7 +45,7 @@ public class Blob: SharedObject, BlobPart {
                         partToAdd += String(char)
                     }
                 }
-                dataSlice.append(partToAdd)
+                dataSlice.append(.string(partToAdd))
             } else {
                 break
             }
@@ -71,16 +71,51 @@ struct BlobOptions: Record {
     var endings: EndingType = .transparent
 }
 
-protocol BlobPart {
-    var size: Int { get }
-    func text() -> String
+enum BlobPart {
+    case string(String)
+    case data(Data)
+    case blob(Blob)
 }
 
-extension String: BlobPart {
-    var size: Int {
-        return self.count
+extension BlobPart: Convertible {
+    public static func convert(from value: Any?, appContext: AppContext) throws -> BlobPart {
+        if let string = value as? String {
+            print("STRING")
+            return .string(string)
+        }
+        if let data = value as? Data {
+            print("DATA")
+            return .data(data)
+        }
+        if let blob = value as? [String: Any] {
+            print("BLOB")
+            print(blob)
+            return .string("")
+        }
+        throw Conversions.ConvertingException<BlobPart>(value)
     }
+}
+
+extension BlobPart {
     func text() -> String {
-        return self
+        switch self {
+        case .string(let str):
+            return str
+        case .data(let data):
+            return String(data: data, encoding: .utf8) ?? data.map { String(format: "%02x", $0) }.joined()
+        case .blob(let blob):
+            return blob.text()
+        }
+    }
+    
+    func size() -> Int {
+        switch self {
+        case .string(let str):
+            return str.lengthOfBytes(using: .utf8)
+        case .data(let data):
+            return data.count
+        case .blob(let blob):
+            return blob.size
+        }
     }
 }

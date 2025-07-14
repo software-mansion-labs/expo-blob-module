@@ -1,5 +1,5 @@
 export declare class Blob {
-	constructor(blobParts?: any, options?: BlobPropertyBag);
+	constructor(blobParts?: any[], options?: BlobPropertyBag);
 
 	slice(start?: number, end?: number, contentType?: string): Blob;
 	text(): Promise<string>;
