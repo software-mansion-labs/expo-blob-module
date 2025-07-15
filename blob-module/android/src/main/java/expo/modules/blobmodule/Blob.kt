@@ -1,20 +1,11 @@
 package expo.modules.blobmodule
 
-import android.util.Log
-import expo.modules.kotlin.jni.JavaScriptTypedArray
 import expo.modules.kotlin.records.Field
 import expo.modules.kotlin.records.Record
 import expo.modules.kotlin.sharedobjects.SharedObject
-import expo.modules.kotlin.typedarray.Int32Array
 import expo.modules.kotlin.typedarray.TypedArray
-import expo.modules.kotlin.typedarray.Uint8Array
-import expo.modules.kotlin.types.Either
 import expo.modules.kotlin.types.EitherOfThree
 import expo.modules.kotlin.types.Enumerable
-import org.jetbrains.annotations.ApiStatus.Internal
-import java.nio.Buffer
-import java.nio.ByteBuffer
-
 class Blob() : SharedObject() {
     var blobParts: List<InternalBlobPart> = listOf()
     var size : Int = 0
@@ -73,9 +64,9 @@ class Blob() : SharedObject() {
     }
 }
 
-typealias BlobPart = EitherOfThree<String, Blob, Int32Array>
+typealias BlobPart = EitherOfThree<String, Blob, TypedArray>
 
-private fun JavaScriptTypedArray.bytes(): ByteArray {
+private fun TypedArray.bytes(): ByteArray {
     var ba = ByteArray(this.byteLength)
 
     for (i in 0..<this.byteLength) {
@@ -96,25 +87,8 @@ fun List<BlobPart>.internal(): List<InternalBlobPart> {
                 InternalBlobPart.BlobPart(it)
             }
         } else  {
-            bp.get(Int32Array::class).let {
-//                InternalBlobPart.BufferPart(ByteBuffer.wrap(ByteArray(1)))
-//                Log.d("BU", it.length.toString())
-//                Log.d("BU", it.toDirectBuffer().toString())
-//                Log.d("BU", it.toDirectBuffer().array().toString())
-//                Log.d("BU", it.toString())
-//                Log.d("BU", it.rawArray.toString())
-//                Log.d("BU", it.rawArray.toDirectBuffer().asCharBuffer())
-//                it.rawArray.toDirectBuffer().compact()
-
-//                Log.d("BU", it.toList().toString())
-//                Log.d("BU", it.rawArray.bytes().toString())
-                // TODO find a better way to convert these
-                InternalBlobPart.BufferPart(it.rawArray.bytes())
-//                InternalBlobPart.BufferPart(it.toList().toString().toByteArray())
-//                InternalBlobPart.BufferPart(ByteArray(10))
-//                InternalBlobPart.BufferPart(it.rawArray.toDirectBuffer().array())
-//                InternalBlobPart.BufferPart(ByteBuffer.wrap(it.toDirectBuffer().array().clone()))
-//                InternalBlobPart.StringPart("[should be byte buffer]")
+            bp.get(TypedArray::class).let {
+                InternalBlobPart.BufferPart(it.bytes())
             }
         }
     }

@@ -8,12 +8,6 @@ export function CreateBlobTestComponent() {
 
 	const [bytes, setBytes] = useState(Uint8Array.from([]))
 
-	// useEffect(() => {
-	// 	blob1?.text().then((text) => {
-	// 		setBlobText(text);
-	// 	});
-	// }, [])
-
 	return (
 		<View style={styles.container}>
 			<Button title="RUN" onPress={() => {

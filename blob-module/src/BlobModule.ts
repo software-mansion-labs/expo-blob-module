@@ -3,13 +3,11 @@ import { Blob } from "./BlobModule.types";
 
 const NativeBlobModule: any = requireNativeModule("ExpoBlob");
 
-export class ExpoBlob extends NativeBlobModule.Blob implements Blob {
-	constructor(blobParts?: (string | ExpoBlob | Int32Array)[], options?: BlobPropertyBag) {
-		// switch(typeof blobParts) {
-		// 	case DataView: super(blobParts as DataView)
-		// 	default: super(blobParts, options)
-		// }
+// TODO Find proper TypedArray type
+type TypedArray = Int32Array
 
+export class ExpoBlob extends NativeBlobModule.Blob implements Blob {
+	constructor(blobParts?: (string | ExpoBlob | TypedArray)[], options?: BlobPropertyBag) {
 		super(blobParts, options);
 	}
 
@@ -30,19 +28,6 @@ export class ExpoBlob extends NativeBlobModule.Blob implements Blob {
 	test() {
 
 	}
-
-	// either(e : string | ExpoBlob | Int32Array): string {
-	// 	return super.either(e)
-	// }
-	eithers(e : (string | boolean| number)[]): string {
-		return super.eithers(e)
-	}
-	// eithereither(e : string | (ExpoBlob | Int32Array)): string {
-	// 	return super.eithereither(e)
-	// }
-	// eithereithers(e : (string | (ExpoBlob | Int32Array))[]): string {
-	// 	return super.eithereithers(e)
-	// }
 
 	// @ts-expect-error
 	async text(): Promise<string> {
