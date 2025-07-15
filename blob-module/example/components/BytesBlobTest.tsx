@@ -14,7 +14,7 @@ export default function BytesBlobTestComponent() {
         blob.text().then(setBlobText)
         blob.arrayBuffer().then(setBlobArrayBuffer)
     }, [])
-    
+
     return <>
         <Text>
             text: {blobText}

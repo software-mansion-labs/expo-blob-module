@@ -25,7 +25,7 @@ export class ExpoBlob extends NativeBlobModule.Blob implements Blob {
 	}
 
 	arrayBuffer(): Promise<ArrayBuffer> {
-		return super.bytes();
+		return super.bytes().then(bytes => bytes.buffer);
 	}
 
 	slice(start?: number, end?: number, contentType?: string): Blob {
