@@ -4,20 +4,8 @@ import { Blob } from "./BlobModule.types";
 const NativeBlobModule: any = requireNativeModule("ExpoBlob");
 
 export class ExpoBlob extends NativeBlobModule.Blob implements Blob {
-	test(): string {
-		return super.test()
-	}
-
-	opt(options : BlobPropertyBag) {
-		return super.opt(options)
-	}
-
 	constructor(blobParts?: (string | Blob)[], options?: BlobPropertyBag) {
 		super(blobParts, options);
-	}
-
-	me(): Blob {
-		return super.me()
 	}
 
 	bytes(): Promise<Uint8Array> {
