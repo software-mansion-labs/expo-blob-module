@@ -39,6 +39,10 @@ class BlobModule : Module() {
                 blob.slice(sliceStart, sliceEnd, contentType ?: "")
             }
 
+            AsyncFunction("bytes") { blob: Blob ->
+                blob.text().toByteArray()
+            }
+
             AsyncFunction("text") { blob: Blob ->
                 blob.text()
             }

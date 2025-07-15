@@ -20,6 +20,10 @@ export class ExpoBlob extends NativeBlobModule.Blob implements Blob {
 		return super.me()
 	}
 
+	bytes(): Promise<Uint8Array> {
+		return super.bytes();
+	}
+
 	slice(start?: number, end?: number, contentType?: string): Blob {
 		return super.slice(start, end, contentType);
 	}
