@@ -9,14 +9,19 @@ export function CreateBlobTestComponent() {
 		endings: "native",
 	});
 
-	blob?.text().then((text) => {
+	const mixedBlob = new Blob([blob, "cd"], {
+		type: "test/plain",
+		endings: "native",
+	});
+
+	mixedBlob?.text().then((text) => {
 		setBlobText(text);
 	});
 
 	return (
 		<View style={styles.container}>
-			<Text>Size: {blob?.size}</Text>
-			<Text>Type: {blob?.type}</Text>
+			<Text>Size: {mixedBlob?.size}</Text>
+			<Text>Type: {mixedBlob?.type}</Text>
 			<Text>Text: {blobText}</Text>
 		</View>
 	);

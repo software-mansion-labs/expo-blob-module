@@ -6,14 +6,16 @@ public class BlobModule: Module {
     Name("ExpoBlob")
 
     Class(Blob.self) {
-      Constructor { (blobParts: Either<[String], [Blob]>, options: BlobOptions?) in
-        if let blobPartsList: [String] = blobParts.get() {
-          return Blob(blobParts: blobPartsList, options: options ?? BlobOptions())
+      Constructor { (blobParts: [Either<String, Blob>]?, options: BlobOptions?) in
+        let blobPartsProcessed: [BlobPart]? = blobParts?.map { part in
+          if let part: String = part.get() {
+            return part
+          } else if let part: Blob = part.get() {
+            return part
+          }
+          return ""
         }
-        else if let blobPartsSingleBlob: [Blob] = blobParts.get() {
-          return Blob(blobParts: blobPartsSingleBlob, options: options ?? BlobOptions())
-        }
-        return Blob(blobParts: [], options: options ?? BlobOptions())
+        return Blob(blobParts: blobPartsProcessed ?? [], options: BlobOptions())
       }
       
       Property("size") { (blob: Blob) in
