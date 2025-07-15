@@ -13,7 +13,9 @@ const blob1 = new Blob([
 			"g", 
 			new Blob([
 				"hhhH",
-				"iii",
+				"i",
+				Int32Array.from([33, 21, 90]),
+				"ii",
 				new Blob([
 					"jj"
 				])
@@ -29,7 +31,7 @@ export function SliceBlobTestComponent() {
 	const [blobText, setBlobText] = useState<string | null>(null);
 	const [slicedBlobText, setSlicedBlobText] = useState<string | null>(null);
 
-	const slicedBlob = blob1.slice(17, 19);
+	const slicedBlob = blob1.slice(17, 20);
 
 	slicedBlob.text().then((text) => {
 		setSlicedBlobText(text);
@@ -44,7 +46,7 @@ export function SliceBlobTestComponent() {
 			<Text>Size: {blob1?.size}</Text>
 			<Text>Type: {blob1?.type}</Text>
 			<Text>Text before slice: {blobText}</Text>
-			<Text>Text after slice [17-19]: {slicedBlobText}</Text>
+			<Text>Text after slice [17-20]: {slicedBlobText}</Text>
 			<Text>Slice size: {slicedBlob?.size}</Text>
 		</View>
 	);

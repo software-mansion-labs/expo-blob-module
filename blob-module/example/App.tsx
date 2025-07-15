@@ -5,6 +5,7 @@ import { SliceBlobTestComponent } from "./components/SliceBlobTest";
 import { StreamBlobTestComponent } from "./components/StreamBlobTest";
 import BytesBlobTest from "./components/BytesBlobTest";
 import BytesBlobTestComponent from "./components/BytesBlobTest";
+import EitherBlobTestComponent from "./components/EitherBlobTest";
 
 export default function App() {
 	return (
@@ -24,6 +25,9 @@ export default function App() {
 					<TestContainer title={"Bytes Blob Test"}>
 						<BytesBlobTestComponent />
 					</TestContainer>
+					{/* <TestContainer title={"Either Blob Test"}>
+						<EitherBlobTestComponent />
+					</TestContainer> */}
 				</View>
 			</ScrollView>
 		</SafeAreaView>
