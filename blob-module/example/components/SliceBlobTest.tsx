@@ -6,12 +6,14 @@ export function SliceBlobTestComponent() {
 	const [blobText, setBlobText] = useState<string | null>(null);
 	const [slicedBlobText, setSlicedBlobText] = useState<string | null>(null);
 
-	const blob = new Blob(["aaa", "bbbb", "ccccc", "dddddddddd"], {
+	const blob = new Blob(["PASSSTRING"], {
 		type: "test/plain",
 		endings: "native",
 	});
 
-	const slicedBlob = blob.slice(0, 8);
+	const slicedBlob = blob.slice(0, -6);
+
+	// 1 - 5 -> 1,2,3,4
 
 	slicedBlob.text().then((text) => {
 		setSlicedBlobText(text);
@@ -26,7 +28,7 @@ export function SliceBlobTestComponent() {
 			<Text>Size: {blob?.size}</Text>
 			<Text>Type: {blob?.type}</Text>
 			<Text>Text before slice: {blobText}</Text>
-			<Text>Text after slice [0-8]: {slicedBlobText}</Text>
+			<Text>Text after slice: {slicedBlobText}</Text>
 		</View>
 	);
 }

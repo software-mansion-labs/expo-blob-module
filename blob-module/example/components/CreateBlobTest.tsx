@@ -9,12 +9,16 @@ export function CreateBlobTestComponent() {
 		endings: "native",
 	});
 
-	const mixedBlob = new Blob([blob, "cd"], {
+	const non_unicode = "\u0061\u030A";
+	const input_arr = new TextEncoder().encode(non_unicode);
+
+	const mixedBlob = new Blob([input_arr], {
 		type: "test/plain",
 		endings: "native",
 	});
 
 	mixedBlob?.text().then((text) => {
+		console.log(text);
 		setBlobText(text);
 	});
 

@@ -6,14 +6,16 @@ public class BlobModule: Module {
     Name("ExpoBlob")
 
     Class(Blob.self) {
-      Constructor { (blobParts: [Either<String, Blob>]?, options: BlobOptions?) in
+      Constructor { (blobParts: [EitherOfThree<String, Blob, TypedArray>]?, options: BlobOptions?) in
         let blobPartsProcessed: [BlobPart]? = blobParts?.map { part in
           if let part: String = part.get() {
-            return part
+            return .string(part)
           } else if let part: Blob = part.get() {
-            return part
+            return .blob(part)
+          } else if let part: TypedArray = part.get() {
+            return .typedArray(part)
           }
-          return ""
+          return .string("")
         }
         return Blob(blobParts: blobPartsProcessed ?? [], options: BlobOptions())
       }
