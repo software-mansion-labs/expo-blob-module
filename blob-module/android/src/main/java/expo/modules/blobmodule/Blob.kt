@@ -42,7 +42,7 @@ class Blob() : SharedObject() {
         }
     }
 
-    fun slice(start: Int, end: Int, contentType: String?): Blob {
+    fun slice(start: Int, end: Int, contentType: String): Blob {
         var i : Int = 0
         var bps : MutableList<InternalBlobPart> = mutableListOf()
 
@@ -58,7 +58,7 @@ class Blob() : SharedObject() {
             i += bp.size()
         }
 
-        return Blob(bps)
+        return Blob(bps, BlobOptions(contentType))
     }
 }
 

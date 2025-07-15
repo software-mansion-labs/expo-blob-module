@@ -1,10 +1,7 @@
 package expo.modules.blobmodule
 
-import android.util.Log
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
-import expo.modules.kotlin.types.Either
-import expo.modules.kotlin.types.EitherOfThree
 
 class BlobModule : Module() {
     override fun definition() = ModuleDefinition {
@@ -26,16 +23,24 @@ class BlobModule : Module() {
                 blob.size
             }
 
-            AsyncFunction("text") { blob: Blob ->
-                blob.text()
-            }
-
             Property("type") { blob: Blob ->
                 blob.options.type
             }
 
             Function("slice") { blob: Blob, start: Int?, end: Int?, contentType: String? ->
-                blob.slice(start ?: 0, end ?: blob.size, contentType ?: "")
+                var sliceStart : Int = start ?: 0
+                var sliceEnd : Int = end ?: 0
+                if (sliceStart < 0) {
+                    sliceStart = blob.size + sliceStart
+                }
+                if (sliceEnd < 0) {
+                    sliceEnd = blob.size + sliceEnd
+                }
+                blob.slice(sliceStart, sliceEnd, contentType ?: "")
+            }
+
+            AsyncFunction("text") { blob: Blob ->
+                blob.text()
             }
         }
     }
