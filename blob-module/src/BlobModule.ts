@@ -1,24 +1,10 @@
 import { requireNativeModule } from "expo";
-import { Blob, BlobPart } from "./BlobModule.types";
+import { Blob } from "./BlobModule.types";
 
 const NativeBlobModule: any = requireNativeModule("ExpoBlob");
-
-function flattenBlobParts(parts: any[]): BlobPart[] {
-	const result: BlobPart[] = [];
-	for (const part of parts) {
-		if (Array.isArray(part)) {
-			result.push(...flattenBlobParts(part));
-		} else {
-			result.push(part);
-		}
-	}
-	return result;
-}
-
 export class ExpoBlob extends NativeBlobModule.Blob implements Blob {
 	constructor(blobParts?: any[], options?: BlobPropertyBag) {
-		const flatParts = blobParts ? flattenBlobParts(blobParts) : [];
-		super(flatParts, options);
+		super(blobParts?.flat(Infinity), options);
 	}
 
 	slice(start?: number, end?: number, contentType?: string): ExpoBlob {
