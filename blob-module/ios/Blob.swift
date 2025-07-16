@@ -78,10 +78,9 @@ public class Blob: SharedObject {
           if partStart == 0 && length == typedArray.byteLength {
             dataSlice.append(.typedArray(typedArray))
           } else {
-            let rawPtr = typedArray.rawPointer.advanced(by: partStart)
-            let buffer = UnsafeBufferPointer<UInt8>(start: rawPtr.assumingMemoryBound(to: UInt8.self), count: length)
-            let newData = Data(buffer: buffer)
-            dataSlice.append(.data(newData))
+            let data = Data(bytes: typedArray.rawPointer, count: typedArray.byteLength)
+            let subData = data.subdata(in: partStart..<partStart+length)
+            dataSlice.append(.data(subData))
           }
         
         case .blob(let blob):

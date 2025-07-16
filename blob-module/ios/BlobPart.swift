@@ -17,11 +17,7 @@ extension BlobPart {
       case .blob(let blob):
         return blob.text()
       case .typedArray(let typedArray):
-        let buffer = UnsafeBufferPointer<UInt8>(
-            start: typedArray.rawPointer.assumingMemoryBound(to: UInt8.self),
-            count: typedArray.byteLength
-         )
-        return String(decoding: buffer, as: UTF8.self)
+        return String(decoding: Data(bytes: typedArray.rawPointer, count: typedArray.byteLength), as: UTF8.self)
     }
   }
   
