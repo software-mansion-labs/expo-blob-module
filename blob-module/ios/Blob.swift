@@ -101,11 +101,21 @@ public class Blob: SharedObject {
   }
 }
 
+/// Normalizes the content type string for a Blob.
+/// - Returns: The lowercased content type if it is valid, or an empty string otherwise.
+/// - A valid content type:
+///   - Is not nil or empty
+///   - Contains only printable ASCII characters (0x20–0x7E)
+///   - Does not contain forbidden control characters: NUL (\x00), LF (\x0A), or CR (\x0D)
+/// If any of these conditions are not met, returns an empty string to indicate an invalid or unsafe content type.
 private func normalizedContentType(_ type: String?) -> String {
     guard let type = type, !type.isEmpty else { return "" }
-    let ascii = type.utf8.allSatisfy { $0 >= 0x20 && $0 <= 0x7E }
-    let invalid = type.contains { $0 == "\u{00}" || $0 == "\u{0A}" || $0 == "\u{0D}" }
-    if !ascii || invalid {
+    let asciiRange = "^[\\x20-\\x7E]+$"
+    let forbiddenChars = "[\\x00\\x0A\\x0D]"
+    if type.range(of: asciiRange, options: .regularExpression) == nil {
+        return ""
+    }
+    if type.range(of: forbiddenChars, options: .regularExpression) != nil {
         return ""
     }
     return type.lowercased()

@@ -11,7 +11,7 @@ export function SliceBlobTestComponent() {
 		endings: "native",
 	});
 
-	const slicedBlob = blob.slice(0, 4, "text/plain");
+	const slicedBlob = blob.slice(0, 4, "tex\x09t/plain");
 
 	slicedBlob.text().then((text) => {
 		setSlicedBlobText(text);
