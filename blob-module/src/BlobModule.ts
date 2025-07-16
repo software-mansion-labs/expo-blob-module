@@ -8,20 +8,12 @@ export class ExpoBlob extends NativeBlobModule.Blob implements Blob {
 		super(blobParts, options);
 	}
 
-	bytes(): Promise<Uint8Array> {
-		return super.bytes();
-	}
+	text = super.text
+	bytes = super.bytes
+	slice = super.slice
 
 	arrayBuffer(): Promise<ArrayBuffer> {
 		return super.bytes().then((bytes: Uint8Array) => bytes.buffer);
-	}
-
-	slice(start?: number, end?: number, contentType?: string): ExpoBlob {
-		return super.slice(start, end, contentType);
-	}
-
-	text(): Promise<string> {
-		return (super.text());
 	}
 
 	stream(): ReadableStream {

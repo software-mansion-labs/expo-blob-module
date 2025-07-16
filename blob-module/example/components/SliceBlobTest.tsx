@@ -33,11 +33,11 @@ export function SliceBlobTestComponent() {
 
 	const slicedBlob = blob1.slice(17, 20);
 
-	slicedBlob.text().then((text) => {
+	slicedBlob.text().then((text: string) => {
 		setSlicedBlobText(text);
 	});
 
-	blob1.text().then((text) => {
+	blob1.text().then((text: string) => {
 		setBlobText(text);
 	});
 

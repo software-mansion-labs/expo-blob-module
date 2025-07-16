@@ -11,7 +11,7 @@ export function StreamBlobTestComponent() {
 		endings: "native",
 	});
 
-	blob.text().then((text) => {
+	blob.text().then((text: string) => {
 		setBlobText(text);
 	});
 
