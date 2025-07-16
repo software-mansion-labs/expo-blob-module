@@ -21,7 +21,7 @@ export class ExpoBlob extends NativeBlobModule.Blob implements Blob {
 		super(flatParts, options);
 	}
 
-	slice(start?: number, end?: number, contentType?: string): Blob {
+	slice(start?: number, end?: number, contentType?: string): ExpoBlob {
 		const slicedBlob = super.slice(start, end, contentType);
 		const options: BlobPropertyBag = {
 			type: slicedBlob.type,

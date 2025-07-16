@@ -17,7 +17,7 @@ public class BlobModule: Module {
           }
           return .string("")
         }
-        return Blob(blobParts: blobPartsProcessed ?? [], options: BlobOptions())
+        return Blob(blobParts: blobPartsProcessed ?? [], options: options ?? BlobOptions())
       }
       
       Property("size") { (blob: Blob) in
@@ -33,7 +33,7 @@ public class BlobModule: Module {
       }
       
       Function("slice") { (blob: Blob, start: Int?, end: Int?, contentType: String?) in
-        blob.slice(start: start ?? 0, end: end ?? blob.size - 1, contentType: contentType ?? "")
+        blob.slice(start: start ?? 0, end: end, contentType: contentType ?? "")
       }
       
       Function("text") { (blob: Blob) in
