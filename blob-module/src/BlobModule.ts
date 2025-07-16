@@ -23,11 +23,8 @@ export class ExpoBlob extends NativeBlobModule.Blob implements Blob {
 
 	slice(start?: number, end?: number, contentType?: string): ExpoBlob {
 		const slicedBlob = super.slice(start, end, contentType);
-		const options: BlobPropertyBag = {
-			type: slicedBlob.type,
-			endings: slicedBlob.endings,
-		};
-		return new ExpoBlob([slicedBlob], options);
+		Object.setPrototypeOf(slicedBlob, ExpoBlob.prototype);
+		return slicedBlob;
 	}
 
 	async text(): Promise<string> {

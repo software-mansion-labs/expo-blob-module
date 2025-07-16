@@ -28,10 +28,6 @@ public class BlobModule: Module {
         blob.type
       }
       
-      Property("endings") { (blob: Blob) in
-        blob.options.endings
-      }
-      
       Function("slice") { (blob: Blob, start: Int?, end: Int?, contentType: String?) in
         blob.slice(start: start ?? 0, end: end, contentType: contentType ?? "")
       }
