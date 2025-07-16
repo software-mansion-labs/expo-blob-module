@@ -6,12 +6,19 @@ export function SliceBlobTestComponent() {
 	const [blobText, setBlobText] = useState<string | null>(null);
 	const [slicedBlobText, setSlicedBlobText] = useState<string | null>(null);
 
-	const blob = new Blob(["aaa", "bbbb", "ccccc", "dddddddddd"], {
-		type: "test/plain",
+	const blob1 = new Blob(["squiggle"]);
+	const arrayBuffer = new ArrayBuffer(16);
+	const int8View = new Int8Array(arrayBuffer);
+	for (var i = 0; i < 16; i++) {
+		int8View[i] = i + 65;
+	}
+
+	const blob = new Blob([new Uint8Array(arrayBuffer, 3, 5), blob1, "foo"], {
+		type: "text/plain",
 		endings: "native",
 	});
 
-	const slicedBlob = blob.slice(0, 8);
+	const slicedBlob = blob.slice(0, 8, "tex\x09t/plain");
 
 	slicedBlob.text().then((text) => {
 		setSlicedBlobText(text);
@@ -23,10 +30,10 @@ export function SliceBlobTestComponent() {
 
 	return (
 		<View style={styles.container}>
-			<Text>Size: {blob?.size}</Text>
-			<Text>Type: {blob?.type}</Text>
+			<Text>Size: {slicedBlob?.size}</Text>
+			<Text>Type: {slicedBlob?.type}</Text>
 			<Text>Text before slice: {blobText}</Text>
-			<Text>Text after slice [0-8]: {slicedBlobText}</Text>
+			<Text>Text after slice: {slicedBlobText}</Text>
 		</View>
 	);
 }
