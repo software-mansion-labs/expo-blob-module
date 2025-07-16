@@ -9,13 +9,8 @@ class BlobModule : Module() {
 
         Class(Blob::class) {
             Constructor() { blobParts: List<BlobPart>, options: BlobOptionsBag? ->
-                var type = BlobOptions().type
-                var endings = BlobOptions().endings
-
-                if (options != null) {
-                    type = options.type
-                    endings = options.endings
-                }
+                var type = options?.type ?: BlobOptions().type
+                var endings = options?.endings ?: BlobOptions().endings
                 Blob(blobParts.internal(endings == EndingType.NATIVE), BlobOptions(type, endings))
             }
 

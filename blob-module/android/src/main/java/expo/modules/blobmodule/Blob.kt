@@ -81,7 +81,7 @@ private fun TypedArray.bytes(): ByteArray {
 
 const val CR = '\r'
 const val LF = '\n'
-fun String.toNativeNewlines(): String {
+private fun String.toNativeNewlines(): String {
     var i = 0
     var str = ""
 
@@ -100,7 +100,7 @@ fun String.toNativeNewlines(): String {
     return str
 }
 
-fun List<BlobPart>.internal(nativeNewlines: Boolean): List<InternalBlobPart> {
+internal fun List<BlobPart>.internal(nativeNewlines: Boolean): List<InternalBlobPart> {
     return this.map() { bp: BlobPart ->
         if (bp.`is`(String::class)) {
             bp.get(String::class).let {
