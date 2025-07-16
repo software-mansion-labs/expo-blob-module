@@ -38,7 +38,7 @@ class BlobModule : Module() {
                 blob.text().toByteArray()
             }
 
-            AsyncFunction("text") { blob: Blob ->
+            Function("text") { blob: Blob ->
                 blob.text()
             }
         }

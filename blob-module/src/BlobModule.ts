@@ -8,7 +8,6 @@ export class ExpoBlob extends NativeBlobModule.Blob implements Blob {
 		super(blobParts, options);
 	}
 
-	text = super.text
 	bytes = super.bytes
 
 	slice(start?: number, end?: number, contentType?: string ): ExpoBlob {
@@ -19,6 +18,10 @@ export class ExpoBlob extends NativeBlobModule.Blob implements Blob {
 
 	arrayBuffer(): Promise<ArrayBuffer> {
 		return super.bytes().then((bytes: Uint8Array) => bytes.buffer);
+	}
+
+	text(): Promise<string> {
+		return Promise.resolve(super.text())
 	}
 
 	stream(): ReadableStream {
