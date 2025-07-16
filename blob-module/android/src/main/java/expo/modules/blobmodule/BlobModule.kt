@@ -16,7 +16,7 @@ class BlobModule : Module() {
                     type = options.type
                     endings = options.endings
                 }
-                Blob(blobParts.internal(), BlobOptions(type, endings))
+                Blob(blobParts.internal(endings == EndingType.NATIVE), BlobOptions(type, endings))
             }
 
             Property("size") { blob: Blob ->

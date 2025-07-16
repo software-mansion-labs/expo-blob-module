@@ -76,11 +76,21 @@ private fun TypedArray.bytes(): ByteArray {
     return ba
 }
 
-fun List<BlobPart>.internal(): List<InternalBlobPart> {
+fun String.toNativeNewlines(): String {
+    // TODO
+    return this
+}
+
+fun List<BlobPart>.internal(nativeNewlines : Boolean): List<InternalBlobPart> {
     return this.map() { bp : BlobPart ->
         if (bp.`is`(String::class)) {
             bp.get(String::class).let {
-                InternalBlobPart.StringPart(it)
+                val str = if (nativeNewlines) {
+                    it.toNativeNewlines()
+                } else {
+                    it
+                }
+                InternalBlobPart.StringPart(str)
             }
         } else if (bp.`is`(Blob::class)) {
             bp.get(Blob::class).let {

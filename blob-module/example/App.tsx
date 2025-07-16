@@ -4,6 +4,7 @@ import { CreateBlobTestComponent } from "./components/CreateBlobTest";
 import { SliceBlobTestComponent } from "./components/SliceBlobTest";
 import { StreamBlobTestComponent } from "./components/StreamBlobTest";
 import BytesBlobTestComponent from "./components/BytesBlobTest";
+import BlobArrayBufferTest from "./tests/Blob-array-buffer-test";
 
 export default function App() {
 	return (
