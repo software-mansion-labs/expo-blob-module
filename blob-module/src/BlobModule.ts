@@ -10,7 +10,12 @@ export class ExpoBlob extends NativeBlobModule.Blob implements Blob {
 
 	text = super.text
 	bytes = super.bytes
-	slice = super.slice
+
+	slice(start?: number, end?: number, contentType?: string ): ExpoBlob {
+		let blob = super.slice(start, end, contentType)
+		Object.setPrototypeOf(blob, ExpoBlob.prototype)
+		return blob
+	}
 
 	arrayBuffer(): Promise<ArrayBuffer> {
 		return super.bytes().then((bytes: Uint8Array) => bytes.buffer);

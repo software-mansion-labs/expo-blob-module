@@ -15,6 +15,8 @@ export function CreateBlobTestComponent() {
 				const blob1 = new Blob([
 					"a",
 					"bbb",
+					new Blob(["SLICe"]).slice(1, 4),
+					new Blob(["Slice"]),
 					blob0,
 					Int32Array.from([1, 13, 15]),
 					Int32Array.from([1, -1, 2]),

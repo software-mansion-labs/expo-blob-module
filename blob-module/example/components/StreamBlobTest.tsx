@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Text, View, StyleSheet } from "react-native";
 import { ExpoBlob as Blob } from "blob-module";
 
 export function StreamBlobTestComponent() {
 	const [blobText, setBlobText] = useState<string | null>(null);
 	const [streamedBlobArray, setStreamedBlobArray] = useState<Uint8Array>();
+	const [slicedStreamText, setSlicedStreamText] = useState<string>();
 
 	const blob = new Blob(["aaa", "bbbb"], {
 		type: "test/plain",
@@ -18,6 +19,10 @@ export function StreamBlobTestComponent() {
 	readStream(blob.stream()).then((data: Uint8Array) => {
 		setStreamedBlobArray(data);
 	});
+
+	useEffect(() => {
+		blob.slice(2, 5).stream()
+	}, [])
 
 	return (
 		<View style={styles.container}>
