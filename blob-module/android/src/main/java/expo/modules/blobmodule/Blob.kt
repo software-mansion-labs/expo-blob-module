@@ -1,5 +1,6 @@
 package expo.modules.blobmodule
 
+import android.util.Log
 import expo.modules.kotlin.records.Field
 import expo.modules.kotlin.records.Record
 import expo.modules.kotlin.sharedobjects.SharedObject
@@ -76,9 +77,25 @@ private fun TypedArray.bytes(): ByteArray {
     return ba
 }
 
+const val CR = '\r'
+const val LF = '\n'
 fun String.toNativeNewlines(): String {
-    // TODO
-    return this
+    var i = 0
+    var str = ""
+
+    while (i < this.length) {
+        if (this[i] == CR) {
+            str += LF
+            i += 1
+            if(i < this.length && this[i] == LF) {
+                i += 1
+            }
+            continue
+        }
+        str += this[i]
+        i += 1
+    }
+    return str
 }
 
 fun List<BlobPart>.internal(nativeNewlines : Boolean): List<InternalBlobPart> {
