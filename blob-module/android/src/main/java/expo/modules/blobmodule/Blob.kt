@@ -7,10 +7,11 @@ import expo.modules.kotlin.sharedobjects.SharedObject
 import expo.modules.kotlin.typedarray.TypedArray
 import expo.modules.kotlin.types.EitherOfThree
 import expo.modules.kotlin.types.Enumerable
+
 class Blob() : SharedObject() {
     var blobParts: List<InternalBlobPart> = listOf()
-    var size : Int = 0
-    var options : BlobOptions = BlobOptions()
+    var size: Int = 0
+    var options: BlobOptions = BlobOptions()
 
     constructor(blobParts: List<InternalBlobPart>, options: BlobOptions = BlobOptions()) : this() {
         this.blobParts = blobParts
@@ -30,8 +31,8 @@ class Blob() : SharedObject() {
     }
 
     private fun InternalBlobPart.offsetSlice(start: Int, end: Int, offset: Int): InternalBlobPart {
-        var s : Int = start - offset
-        var e : Int = end - offset
+        var s: Int = start - offset
+        var e: Int = end - offset
         if (s < 0) {
             s = 0
         }
@@ -41,15 +42,17 @@ class Blob() : SharedObject() {
         return when (this) {
             is InternalBlobPart.StringPart -> InternalBlobPart.StringPart(string.substring(s, e))
             is InternalBlobPart.BlobPart -> InternalBlobPart.BlobPart(blob.slice(s, e, ""))
-            is InternalBlobPart.BufferPart -> InternalBlobPart.BufferPart(buffer.slice(s..<e).toByteArray())
+            is InternalBlobPart.BufferPart -> InternalBlobPart.BufferPart(
+                buffer.slice(s..<e).toByteArray()
+            )
         }
     }
 
     fun slice(start: Int, end: Int, contentType: String): Blob {
-        var i : Int = 0
-        var bps : MutableList<InternalBlobPart> = mutableListOf()
+        var i: Int = 0
+        var bps: MutableList<InternalBlobPart> = mutableListOf()
 
-        for ( bp in blobParts ) {
+        for (bp in blobParts) {
             if (i + bp.size() <= start) {
                 i += bp.size()
                 continue
@@ -87,7 +90,7 @@ fun String.toNativeNewlines(): String {
         if (this[i] == CR) {
             str += LF
             i += 1
-            if(i < this.length && this[i] == LF) {
+            if (i < this.length && this[i] == LF) {
                 i += 1
             }
             continue
@@ -98,8 +101,8 @@ fun String.toNativeNewlines(): String {
     return str
 }
 
-fun List<BlobPart>.internal(nativeNewlines : Boolean): List<InternalBlobPart> {
-    return this.map() { bp : BlobPart ->
+fun List<BlobPart>.internal(nativeNewlines: Boolean): List<InternalBlobPart> {
+    return this.map() { bp: BlobPart ->
         if (bp.`is`(String::class)) {
             bp.get(String::class).let {
                 val str = if (nativeNewlines) {
@@ -113,7 +116,7 @@ fun List<BlobPart>.internal(nativeNewlines : Boolean): List<InternalBlobPart> {
             bp.get(Blob::class).let {
                 InternalBlobPart.BlobPart(it)
             }
-        } else  {
+        } else {
             bp.get(TypedArray::class).let {
                 InternalBlobPart.BufferPart(it.bytes())
             }
@@ -143,16 +146,16 @@ sealed class InternalBlobPart() {
     }
 }
 
-enum class EndingType(val str : String = "transparent") : Enumerable {
-    TRANSPARENT("transparent"),
-    NATIVE("native"),
+enum class EndingType(val str: String = "transparent") : Enumerable {
+    TRANSPARENT("transparent"), NATIVE("native"),
 }
 
-data class BlobOptions(val type: String = "", val endings : EndingType = EndingType.TRANSPARENT)
+data class BlobOptions(val type: String = "", val endings: EndingType = EndingType.TRANSPARENT)
 
 class BlobOptionsBag : Record {
     @Field
     val type: String = ""
+
     @Field
-    val endings : EndingType = EndingType.TRANSPARENT
+    val endings: EndingType = EndingType.TRANSPARENT
 }

@@ -8,7 +8,7 @@ class BlobModule : Module() {
         Name("ExpoBlob")
 
         Class(Blob::class) {
-            Constructor() { blobParts: List<BlobPart>, options: BlobOptionsBag?->
+            Constructor() { blobParts: List<BlobPart>, options: BlobOptionsBag? ->
                 var type = BlobOptions().type
                 var endings = BlobOptions().endings
 
@@ -28,8 +28,8 @@ class BlobModule : Module() {
             }
 
             Function("slice") { blob: Blob, start: Int?, end: Int?, contentType: String? ->
-                var sliceStart : Int = start ?: 0
-                var sliceEnd : Int = end ?: 0
+                var sliceStart: Int = start ?: 0
+                var sliceEnd: Int = end ?: 0
                 if (sliceStart < 0) {
                     sliceStart = blob.size + sliceStart
                 }

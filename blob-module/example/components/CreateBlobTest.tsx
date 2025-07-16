@@ -6,7 +6,7 @@ export function CreateBlobTestComponent() {
 	const [blobText, setBlobText] = useState<string | null>(null);
 	const [blob1, setBlob1] = useState<Blob | null>(null)
 
-	const [bytes, setBytes] = useState(Uint8Array.from([]))
+	const [bytes, setBytes] = useState<ArrayBufferView>(Uint8Array.from([]))
 
 	return (
 		<View style={styles.container}>

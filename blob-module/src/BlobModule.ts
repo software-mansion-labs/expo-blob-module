@@ -3,34 +3,24 @@ import { Blob } from "./BlobModule.types";
 
 const NativeBlobModule: any = requireNativeModule("ExpoBlob");
 
-// TODO Find proper TypedArray type
-type TypedArray = Int32Array
-
 export class ExpoBlob extends NativeBlobModule.Blob implements Blob {
-	constructor(blobParts?: (string | ExpoBlob | TypedArray)[], options?: BlobPropertyBag) {
+	constructor(blobParts?: (string | ExpoBlob | ArrayBufferView)[], options?: BlobPropertyBag) {
 		super(blobParts, options);
 	}
 
-	// @ts-expect-error
-	async bytes(): Promise<Uint8Array> {
+	bytes(): Promise<Uint8Array> {
 		return super.bytes();
 	}
 
-	// @ts-expect-error
-	async arrayBuffer(): Promise<ArrayBuffer> {
-		return super.bytes().then(bytes => bytes.buffer);
+	arrayBuffer(): Promise<ArrayBuffer> {
+		return super.bytes().then((bytes: Uint8Array) => bytes.buffer);
 	}
 
-	slice(start?: number, end?: number, contentType?: string): Blob {
+	slice(start?: number, end?: number, contentType?: string): ExpoBlob {
 		return super.slice(start, end, contentType);
 	}
 
-	test() {
-
-	}
-
-	// @ts-expect-error
-	async text(): Promise<string> {
+	text(): Promise<string> {
 		return (super.text());
 	}
 
