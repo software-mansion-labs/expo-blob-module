@@ -98,6 +98,14 @@ public class Blob: SharedObject {
   func text() -> String {
     return blobParts.reduce("") { $0 + $1.text() }
   }
+  
+  func bytes() async -> [UInt8] {
+    var result: [UInt8] = []
+    for part in blobParts {
+      result.append(contentsOf: await part.bytes())
+    }
+    return result
+  }
 }
 
 /// Normalizes the content type string for a Blob.

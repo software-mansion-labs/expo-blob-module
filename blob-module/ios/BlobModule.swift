@@ -35,6 +35,10 @@ public class BlobModule: Module {
       Function("text") { (blob: Blob) in
         blob.text()
       }
+      
+      AsyncFunction("bytes") { (blob: Blob) async -> [UInt8] in
+        await blob.bytes()
+      }
     }
   }
 }

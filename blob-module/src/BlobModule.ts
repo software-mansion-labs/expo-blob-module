@@ -13,10 +13,6 @@ export class ExpoBlob extends NativeBlobModule.Blob implements Blob {
 		return slicedBlob;
 	}
 
-	async text(): Promise<string> {
-		return Promise.resolve(super.text());
-	}
-
 	stream(): ReadableStream {
 		const text = super.text();
 		const encoder = new TextEncoder();
@@ -32,5 +28,9 @@ export class ExpoBlob extends NativeBlobModule.Blob implements Blob {
 				}
 			},
 		});
+	}
+
+	async text(): Promise<string> {
+		return Promise.resolve(super.text());
 	}
 }
