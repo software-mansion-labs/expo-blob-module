@@ -1,6 +1,5 @@
 package expo.modules.blobmodule
 
-import android.util.Log
 import expo.modules.kotlin.records.Field
 import expo.modules.kotlin.records.Record
 import expo.modules.kotlin.sharedobjects.SharedObject
