@@ -10,16 +10,18 @@ import expo.modules.kotlin.types.Enumerable
 
 class Blob() : SharedObject() {
     var blobParts: List<InternalBlobPart> = listOf()
-    var size: Int = 0
     var type: String = ""
+    val size: Int by lazy {
+        var size = 0
+        for (bp in blobParts) {
+            size += bp.size()
+        }
+        return@lazy size
+    }
 
     constructor(blobParts: List<InternalBlobPart>, type: String) : this() {
         this.blobParts = blobParts
         this.type = if(validType(type)) type.lowercase() else ""
-
-        for (bp in blobParts) {
-            size += bp.size()
-        }
     }
 
     fun text(): String {
