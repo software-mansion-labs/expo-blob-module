@@ -1,5 +1,6 @@
 package expo.modules.blobmodule
 
+import android.util.Log
 import expo.modules.kotlin.records.Field
 import expo.modules.kotlin.records.Record
 import expo.modules.kotlin.sharedobjects.SharedObject
@@ -10,11 +11,11 @@ import expo.modules.kotlin.types.Enumerable
 class Blob() : SharedObject() {
     var blobParts: List<InternalBlobPart> = listOf()
     var size: Int = 0
-    var options: BlobOptions = BlobOptions()
+    var type: String = ""
 
-    constructor(blobParts: List<InternalBlobPart>, options: BlobOptions = BlobOptions()) : this() {
+    constructor(blobParts: List<InternalBlobPart>, type: String) : this() {
         this.blobParts = blobParts
-        this.options = options
+        this.type = if(validType(type)) type.lowercase() else ""
 
         for (bp in blobParts) {
             size += bp.size()
@@ -63,8 +64,19 @@ class Blob() : SharedObject() {
             i += bp.size()
         }
 
-        return Blob(bps, BlobOptions(contentType))
+        return Blob(bps, contentType)
     }
+}
+
+private fun validType(type : String): Boolean {
+    Log.d("UT", "type: " + type + ", type length: " + type.length.toString())
+    for (i in 0..<type.length) {
+        val c: Char = type[i]
+        if (c.code < 0x20 || c.code > 0x7E) {
+            return false;
+        }
+    }
+    return true;
 }
 
 typealias BlobPart = EitherOfThree<String, Blob, TypedArray>
@@ -149,6 +161,7 @@ enum class EndingType(val str: String = "transparent") : Enumerable {
     TRANSPARENT("transparent"), NATIVE("native"),
 }
 
+internal const val DEFAULT_TYPE = ""
 data class BlobOptions(val type: String = "", val endings: EndingType = EndingType.TRANSPARENT)
 
 class BlobOptionsBag : Record {

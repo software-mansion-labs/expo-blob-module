@@ -9,9 +9,9 @@ class BlobModule : Module() {
 
         Class(Blob::class) {
             Constructor() { blobParts: List<BlobPart>, options: BlobOptionsBag? ->
-                var type = options?.type ?: BlobOptions().type
-                var endings = options?.endings ?: BlobOptions().endings
-                Blob(blobParts.internal(endings == EndingType.NATIVE), BlobOptions(type, endings))
+                var type = options?.type ?: DEFAULT_TYPE
+                var endings = options?.endings ?: EndingType.TRANSPARENT
+                Blob(blobParts.internal(endings == EndingType.NATIVE), type)
             }
 
             Property("size") { blob: Blob ->
@@ -19,7 +19,7 @@ class BlobModule : Module() {
             }
 
             Property("type") { blob: Blob ->
-                blob.options.type
+                blob.type
             }
 
             Function("slice") { blob: Blob, start: Int?, end: Int?, contentType: String? ->
