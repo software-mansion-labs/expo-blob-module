@@ -24,7 +24,7 @@ export function SliceBlobTestComponent() {
 		setSlicedBlobText(text);
 	});
 
-	blob.text().then((text) => {
+	blob1.text().then((text: string) => {
 		setBlobText(text);
 	});
 

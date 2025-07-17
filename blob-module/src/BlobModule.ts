@@ -1,7 +1,24 @@
-import { requireNativeModule } from "expo";
+import { NativeModule, requireNativeModule, SharedObject } from "expo";
 import { Blob } from "./BlobModule.types";
 
-const NativeBlobModule: any = requireNativeModule("ExpoBlob");
+type BlobPart = string | ExpoBlob | ArrayBufferView
+
+declare class NativeBlob extends SharedObject {
+	readonly size: number
+	readonly type: string
+	constructor(blobParts?: BlobPart[], options?: BlobPropertyBag)
+	slice(start?: number, end?: number, contentType?: string): ExpoBlob
+	bytes(): Promise<Uint8Array>
+	text(): Promise<string>
+	syncText(): string
+}
+
+declare class ExpoBlobModule extends NativeModule {
+	Blob: typeof NativeBlob
+}
+
+const NativeBlobModule = requireNativeModule<ExpoBlobModule>("ExpoBlob");
+
 export class ExpoBlob extends NativeBlobModule.Blob implements Blob {
 	constructor(blobParts?: any[], options?: BlobPropertyBag) {
 		super(blobParts?.flat(Infinity), options);
@@ -13,12 +30,12 @@ export class ExpoBlob extends NativeBlobModule.Blob implements Blob {
 		return slicedBlob;
 	}
 
-	async text(): Promise<string> {
-		return Promise.resolve(super.text());
+	arrayBuffer(): Promise<ArrayBufferLike> {
+		return super.bytes().then((bytes: Uint8Array) => bytes.buffer);
 	}
 
 	stream(): ReadableStream {
-		const text = super.text();
+		const text = super.syncText();
 		const encoder = new TextEncoder();
 		const uint8 = encoder.encode(text);
 		let offset = 0;
