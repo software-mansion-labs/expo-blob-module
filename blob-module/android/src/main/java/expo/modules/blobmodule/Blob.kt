@@ -50,7 +50,7 @@ class Blob() : SharedObject() {
 
     fun slice(start: Int, end: Int, contentType: String): Blob {
         var i: Int = 0
-        var bps: MutableList<InternalBlobPart> = mutableListOf()
+        val bps: MutableList<InternalBlobPart> = mutableListOf()
 
         for (bp in blobParts) {
             if (i + bp.size() <= start) {
@@ -70,8 +70,7 @@ class Blob() : SharedObject() {
 
 private fun validType(type : String): Boolean {
     Log.d("UT", "type: " + type + ", type length: " + type.length.toString())
-    for (i in 0..<type.length) {
-        val c: Char = type[i]
+    for (c in type) {
         if (c.code < 0x20 || c.code > 0x7E) {
             return false;
         }
@@ -148,7 +147,7 @@ sealed class InternalBlobPart() {
         }
     }
 
-    fun text(): kotlin.String {
+    fun text(): String {
         return when (this) {
             is StringPart -> string
             is BlobPart -> blob.text()
@@ -162,7 +161,6 @@ enum class EndingType(val str: String = "transparent") : Enumerable {
 }
 
 internal const val DEFAULT_TYPE = ""
-data class BlobOptions(val type: String = "", val endings: EndingType = EndingType.TRANSPARENT)
 
 class BlobOptionsBag : Record {
     @Field

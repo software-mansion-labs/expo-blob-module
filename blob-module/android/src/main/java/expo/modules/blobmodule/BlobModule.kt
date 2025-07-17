@@ -9,8 +9,8 @@ class BlobModule : Module() {
 
         Class(Blob::class) {
             Constructor() { blobParts: List<BlobPart>, options: BlobOptionsBag? ->
-                var type = options?.type ?: DEFAULT_TYPE
-                var endings = options?.endings ?: EndingType.TRANSPARENT
+                val type = options?.type ?: DEFAULT_TYPE
+                val endings = options?.endings ?: EndingType.TRANSPARENT
                 Blob(blobParts.internal(endings == EndingType.NATIVE), type)
             }
 
