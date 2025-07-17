@@ -1,14 +1,17 @@
 import { requireNativeModule } from "expo";
 import { Blob } from "./BlobModule.types";
+import { normalizedContentType } from "./utils";
 
 const NativeBlobModule: any = requireNativeModule("ExpoBlob");
+
 export class ExpoBlob extends NativeBlobModule.Blob implements Blob {
 	constructor(blobParts?: any[], options?: BlobPropertyBag) {
 		super(blobParts?.flat(Infinity), options);
 	}
 
 	slice(start?: number, end?: number, contentType?: string): ExpoBlob {
-		const slicedBlob = super.slice(start, end, contentType);
+		const normalizedType = contentType ?? normalizedContentType(contentType);
+		const slicedBlob = super.slice(start, end, normalizedType);
 		Object.setPrototypeOf(slicedBlob, ExpoBlob.prototype);
 		return slicedBlob;
 	}
@@ -32,5 +35,9 @@ export class ExpoBlob extends NativeBlobModule.Blob implements Blob {
 
 	async text(): Promise<string> {
 		return Promise.resolve(super.text());
+	}
+
+	async arrayBuffer(): Promise<ArrayBuffer> {
+		return super.bytes().then((bytes: Uint8Array) => bytes.buffer);
 	}
 }
