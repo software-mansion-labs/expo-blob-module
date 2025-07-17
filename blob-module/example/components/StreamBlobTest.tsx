@@ -10,7 +10,7 @@ export function StreamBlobTestComponent() {
 	const blob = new Blob(["aaa", "bbbb"], {
 		type: "test/plain",
 		endings: "native",
-	});
+	}).slice(0, 5);
 
 	blob.text().then((text: string) => {
 		setBlobText(text);

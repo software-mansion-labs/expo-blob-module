@@ -20,14 +20,14 @@ declare class ExpoBlobModule extends NativeModule {
 const NativeBlobModule = requireNativeModule<ExpoBlobModule>("ExpoBlob");
 
 export class ExpoBlob extends NativeBlobModule.Blob implements Blob {
-	constructor(blobParts?: BlobPart[], options?: BlobPropertyBag) {
-		super(blobParts, options);
+	constructor(blobParts?: any[], options?: BlobPropertyBag) {
+		super(blobParts?.flat(Infinity), options);
 	}
 
-	slice(start?: number, end?: number, contentType?: string ): ExpoBlob {
-		let blob = super.slice(start, end, contentType)
-		Object.setPrototypeOf(blob, ExpoBlob.prototype)
-		return blob
+	slice(start?: number, end?: number, contentType?: string): ExpoBlob {
+		const slicedBlob = super.slice(start, end, contentType);
+		Object.setPrototypeOf(slicedBlob, ExpoBlob.prototype);
+		return slicedBlob;
 	}
 
 	arrayBuffer(): Promise<ArrayBufferLike> {

@@ -4,55 +4,26 @@ import { ExpoBlob as Blob } from "blob-module";
 
 export function CreateBlobTestComponent() {
 	const [blobText, setBlobText] = useState<string | null>(null);
-	const [blob1, setBlob1] = useState<Blob | null>(null)
+	const blob = new Blob(["a", "bbb", "d", ["edf", ["aaaa"]]], {
+		type: "test/plain",
+		endings: "native",
+	});
 
-	const [bytes, setBytes] = useState<ArrayBufferView>(Uint8Array.from([]))
+	const mixedBlob = new Blob([blob, "abc"], {
+		type: "test/plain",
+		endings: "native",
+	});
+
+	mixedBlob?.text().then((text: string) => {
+		console.log(text);
+		setBlobText(text);
+	});
 
 	return (
 		<View style={styles.container}>
-			<Button title="RUN" onPress={() => {
-				const blob0 = new Blob(["ccc", "dd", "e"])
-				const blob1 = new Blob([
-					"a",
-					"bbb",
-					new Blob(["SLICe"]).slice(1, 4),
-					new Blob(["Slice"]),
-					blob0,
-					Int32Array.from([1, 13, 15]),
-					Int32Array.from([1, -1, 2]),
-					new Blob([
-						"fff", 
-						new Blob([
-							"g", 
-							new Blob([
-								"hhhH",
-								"iii",
-								new Blob([
-									"jj"
-								])
-							])
-						])
-					])
-				], {
-					type: "test/plain",
-					endings: "native",
-				});
-
-				const blob2 = new Blob([Int32Array.from([1, 2, 3, 256])])
-				blob2.bytes().then(setBytes)
-				
-				
-				setBlob1(blob1)
-				blob1.text().then(setBlobText)
-			}}/>
-			<Text></Text>
-			<Text>Size: {blob1?.size}</Text>
-			<Text>Type: {blob1?.type}</Text>
+			<Text>Size: {mixedBlob?.size}</Text>
+			<Text>Type: {mixedBlob?.type}</Text>
 			<Text>Text: {blobText}</Text>
-
-			<Text>int32 list: 1, 2, 3, 256</Text>
-			<Text>int32 list bytes: {bytes}</Text>
-			<Text></Text>
 		</View>
 	);
 }
