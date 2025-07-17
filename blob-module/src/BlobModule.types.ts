@@ -4,7 +4,7 @@ export declare class Blob {
 	slice(start?: number, end?: number, contentType?: string): Blob;
 	stream(): ReadableStream;
 	text(): Promise<string>;
-	arrayBuffer(): Promise<ArrayBuffer>;
+	arrayBuffer(): Promise<ArrayBufferLike>;
 }
 
 export type BlobPart = string | ArrayBuffer | ArrayBufferView | Blob;

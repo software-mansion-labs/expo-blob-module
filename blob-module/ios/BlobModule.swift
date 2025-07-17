@@ -32,7 +32,11 @@ public class BlobModule: Module {
         blob.slice(start: start ?? 0, end: end, contentType: contentType ?? "")
       }
       
-      Function("text") { (blob: Blob) in
+      Function("syncText") { (blob: Blob) in
+        blob.text()
+      }
+      
+      AsyncFunction("text") { (blob: Blob) in
         blob.text()
       }
       

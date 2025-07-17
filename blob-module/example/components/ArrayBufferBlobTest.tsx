@@ -6,7 +6,7 @@ export function ArrayBufferBlobTest() {
 	const input_arr = new TextEncoder().encode("\u08B8\u000a");
 	const blob = new Blob([input_arr]);
 
-	blob.arrayBuffer().then((arrayBuffer: ArrayBuffer) => {
+	blob.arrayBuffer().then((arrayBuffer: ArrayBufferLike) => {
 		const result = new Uint8Array(arrayBuffer);
 		console.log("solution:", result);
 		console.log("expected:", input_arr);
