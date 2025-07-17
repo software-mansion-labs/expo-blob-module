@@ -33,4 +33,18 @@ extension BlobPart {
       return typedArray.byteLength
     }
   }
+  
+  func bytes() async -> [UInt8] {
+    switch self {
+      case .string(let str):
+        return [UInt8](str.utf8)
+      case .data(let data):
+        return [UInt8](data)
+      case .blob(let blob):
+        return await blob.bytes()
+      case .typedArray(let typedArray):
+        let data = Data(bytes: typedArray.rawPointer, count: typedArray.byteLength)
+        return [UInt8](data)
+    }
+  }
 }

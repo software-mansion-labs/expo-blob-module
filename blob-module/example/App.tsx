@@ -3,7 +3,7 @@ import { TestContainer } from "./components/TestContainer";
 import { CreateBlobTestComponent } from "./components/CreateBlobTest";
 import { SliceBlobTestComponent } from "./components/SliceBlobTest";
 import { StreamBlobTestComponent } from "./components/StreamBlobTest";
-import BytesBlobTestComponent from "./components/BytesBlobTest";
+import { ArrayBufferBlobTest } from "./components/ArrayBufferBlobTest";
 
 export default function App() {
 	return (
@@ -20,8 +20,8 @@ export default function App() {
 					<TestContainer title={"Stream Blob Test"}>
 						<StreamBlobTestComponent />
 					</TestContainer>
-					<TestContainer title={"Bytes Blob Test"}>
-						<BytesBlobTestComponent />
+					<TestContainer title={"ArrayBuffer/Bytes Blob Test"}>
+						<ArrayBufferBlobTest />
 					</TestContainer>
 				</View>
 			</ScrollView>

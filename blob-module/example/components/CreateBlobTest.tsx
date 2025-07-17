@@ -4,10 +4,13 @@ import { ExpoBlob as Blob } from "blob-module";
 
 export function CreateBlobTestComponent() {
 	const [blobText, setBlobText] = useState<string | null>(null);
-	const blob = new Blob(["a", "bbb", "d", ["edf", ["aaaa"]]], {
-		type: "test/plain",
-		endings: "native",
-	});
+	const blob = new Blob(
+		["a", "bbb", "d", ["edf", ["aaaa", new Uint8Array([64, 65, 66])]]],
+		{
+			type: "test/plain",
+			endings: "native",
+		}
+	);
 
 	const mixedBlob = new Blob([blob, "abc"], {
 		type: "test/plain",

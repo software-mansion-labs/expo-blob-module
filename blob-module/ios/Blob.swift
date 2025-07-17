@@ -37,7 +37,6 @@ public class Blob: SharedObject {
 
     let span = max(relativeEnd - relativeStart, 0)
     if span == 0 {
-      let type = normalizedContentType(contentType)
       return Blob(blobParts: [], options: BlobOptions(type: type, endings: self.options.endings))
     }
 
@@ -91,33 +90,20 @@ public class Blob: SharedObject {
         remaining -= length
     }
   
-    let type = normalizedContentType(contentType)
     return Blob(blobParts: dataSlice, options: BlobOptions(type: type, endings: self.options.endings))
   }
   
   func text() -> String {
     return blobParts.reduce("") { $0 + $1.text() }
   }
-}
-
-/// Normalizes the content type string for a Blob.
-/// - Returns: The lowercased content type if it is valid, or an empty string otherwise.
-/// - A valid content type:
-///   - Is not nil or empty
-///   - Contains only printable ASCII characters (0x20–0x7E)
-///   - Does not contain forbidden control characters: NUL (\x00), LF (\x0A), or CR (\x0D)
-/// If any of these conditions are not met, returns an empty string to indicate an invalid or unsafe content type.
-private func normalizedContentType(_ type: String?) -> String {
-    guard let type = type, !type.isEmpty else { return "" }
-    let asciiRange = "^[\\x20-\\x7E]+$"
-    let forbiddenChars = "[\\x00\\x0A\\x0D]"
-    if type.range(of: asciiRange, options: .regularExpression) == nil {
-        return ""
+  
+  func bytes() async -> [UInt8] {
+    var result: [UInt8] = []
+    for part in blobParts {
+      result.append(contentsOf: await part.bytes())
     }
-    if type.range(of: forbiddenChars, options: .regularExpression) != nil {
-        return ""
-    }
-    return type.lowercased()
+    return result
+  }
 }
 
 enum EndingType: String, Enumerable {
